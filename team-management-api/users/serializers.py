@@ -1,4 +1,6 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer, TokenVerifySerializer
+from rest_framework import serializers
+from .models import CustomUser
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -28,3 +30,9 @@ class CustomTokenRefreshSerializer(TokenRefreshSerializer):
         data = super().validate(attrs)
         self.access_token = data["access"]
         return data
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ("id", "email", "first_name", "last_name", "phone_number")

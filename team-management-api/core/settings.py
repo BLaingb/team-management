@@ -135,7 +135,7 @@ AUTH_USER_MODEL = 'users.CustomUser'
 ## Simple JWT Settings
 ### Sample basic settings for challenge project, would be more carefully considered for production
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=30),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
@@ -149,6 +149,7 @@ SIMPLE_JWT = {
     "LEEWAY": 0,
     "AUTH_COOKIE_SECURE": os.environ.get('AUTH_COOKIE_SECURE', 'False').lower() in ('true', '1'),
     "AUTH_COOKIE_SAMESITE": os.environ.get('AUTH_COOKIE_SAMESITE', 'Lax'),
+    "AUTH_COOKIE_DOMAIN": os.environ.get('AUTH_COOKIE_DOMAIN', 'localhost'),
     "AUTH_COOKIE_ACCESS": os.environ.get('AUTH_COOKIE_ACCESS', 'access_token'),
     "AUTH_COOKIE_REFRESH": os.environ.get('AUTH_COOKIE_REFRESH', 'refresh_token'),
     "AUTH_HEADER_TYPES": ("Bearer",),

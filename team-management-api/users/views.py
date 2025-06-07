@@ -2,7 +2,9 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
-from .serializers import CustomTokenObtainPairSerializer, CustomTokenRefreshSerializer, CustomTokenVerifySerializer
+from .serializers import CustomTokenObtainPairSerializer, CustomTokenRefreshSerializer, CustomTokenVerifySerializer, UserSerializer
+from rest_framework_simplejwt.tokens import AccessToken
+from django.contrib.auth import get_user_model
 
 # JWT Auth Views
 # Should go in a separate auth app, to keep it simple I've put it here
@@ -43,12 +45,10 @@ class HttpOnlyCookieTokenObtainPairView(TokenObtainPairView):
             samesite=settings.SIMPLE_JWT["AUTH_COOKIE_SAMESITE"],
         )
 
-        response.data = {
-            "user_id": serializer.user.id,
-            "email": serializer.user.email,
-            "first_name": serializer.user.first_name,
-            "last_name": serializer.user.last_name,
-        }
+        # Get user data
+        user_data = UserSerializer(serializer.user).data
+
+        response.data = user_data
 
         return response
 
@@ -71,10 +71,18 @@ class HttpOnlyCookieTokenVerifyView(TokenVerifyView):
         except Exception as e:
             return Response({"detail": "Invalid token"}, status=status.HTTP_401_UNAUTHORIZED)
 
+        # Decode token and get user
+        try:
+            token = AccessToken(access_token)
+            user_id = token["user_id"]
+            User = get_user_model()
+            user = User.objects.get(id=user_id)
+            user_data = UserSerializer(user).data
+        except Exception as e:
+            return Response({"detail": "User not found or token invalid"}, status=status.HTTP_401_UNAUTHORIZED)
+
         response = Response(status=status.HTTP_200_OK)
-        response.data = {
-            "message": "Token verified successfully"
-        }
+        response.data = user_data
         return response
 
 class HttpOnlyCookieTokenRefreshView(TokenRefreshView):

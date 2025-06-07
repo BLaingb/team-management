@@ -1,7 +1,7 @@
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
-import Header from '../components/Header'
+import Header from '../components/layout/Header.tsx'
 
 import TanStackQueryLayout from '../integrations/tanstack-query/layout.tsx'
 

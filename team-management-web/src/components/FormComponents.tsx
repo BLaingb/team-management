@@ -4,11 +4,11 @@ import { useFieldContext, useFormContext } from '../hooks/demo.form-context'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Textarea as ShadcnTextarea } from '@/components/ui/textarea'
+import { Label } from '@/components/ui/label'
 import * as ShadcnSelect from '@/components/ui/select'
 import { Slider as ShadcnSlider } from '@/components/ui/slider'
 import { Switch as ShadcnSwitch } from '@/components/ui/switch'
-import { Label } from '@/components/ui/label'
+import { Textarea as ShadcnTextarea } from '@/components/ui/textarea'
 
 export function SubscribeButton({ label }: { label: string }) {
   const form = useFormContext()
@@ -172,3 +172,32 @@ export function Switch({ label }: { label: string }) {
     </div>
   )
 }
+
+
+export function PasswordField({
+    label,
+    placeholder = '********',
+  }: {
+    label: string
+    placeholder: string
+  }) {
+    const field = useFieldContext<string>()
+    const errors = useStore(field.store, (state) => state.meta.errors)
+  
+    return (
+      <div>
+        <Label htmlFor={label} className="mb-2 text-xl font-bold">
+          {label}
+        </Label>
+        <Input
+          value={field.state.value}
+          placeholder={placeholder}
+          onBlur={field.handleBlur}
+          onChange={(e) => field.handleChange(e.target.value)}
+          type="password"
+        />
+        {field.state.meta.isTouched && <ErrorMessages errors={errors} />}
+      </div>
+    )
+  }
+  
