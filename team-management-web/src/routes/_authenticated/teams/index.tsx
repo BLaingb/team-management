@@ -1,10 +1,14 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { useGetTeams } from '@/lib/team-client'
+import { teamClient } from '@/lib/team-client'
 import { createFileRoute } from '@tanstack/react-router'
 import { ChevronRight } from 'lucide-react'
 
 export const Route = createFileRoute('/_authenticated/teams/')({
+  loader: async () => {
+    const teams = await teamClient.getTeams();
+    return { teams };
+  },
   component: RouteComponent,
 })
 
@@ -34,10 +38,7 @@ function EmptyState() {
 }
 
 function RouteComponent() {
-  const { data: teams, isLoading } = useGetTeams();
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
+  const { teams } = Route.useLoaderData();
   if (!teams || teams.length === 0) {
     return <EmptyState />
   }
