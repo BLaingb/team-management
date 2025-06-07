@@ -18,33 +18,41 @@ function RouteComponent() {
   // Mocked team data
   const teams = [
     {
-      id: 'team-1',
+      id: 1,
       name: 'Frontend Wizards',
       description: 'Building beautiful and interactive user interfaces.',
       members: [
-        { id: '1', name: 'Alice Johnson', email: 'alice@example.com' },
-        { id: '2', name: 'Bob Smith', email: 'bob@example.com' },
+        { user: { id: '1', full_name: 'Alice Johnson', email: 'alice@example.com', phone_number: '1234567890' }, role: { id: '1', name: 'Admin', description: 'Admin' } },
+        { user: { id: '2', full_name: 'Bob Smith', email: 'bob@example.com', phone_number: '1234567890' }, role: { id: '2', name: 'User', description: 'User' } },
       ],
     },
     {
-      id: 'team-2',
+      id: 2,
       name: 'Backend Ninjas',
       description: 'Crafting robust and scalable backend systems.',
       members: [
-        { id: '3', name: 'Charlie Brown', email: 'charlie@example.com' },
-        { id: '4', name: 'Dana White', email: 'dana@example.com' },
-        { id: '5', name: 'Eve Black', email: 'eve@example.com' },
-        { id: '6', name: 'Frank Green', email: 'frank@example.com' },
+        { user: { id: '3', full_name: 'Charlie Brown', email: 'charlie@example.com', phone_number: '1234567890' }, role: { id: '3', name: 'Admin', description: 'Admin' } },
+        { user: { id: '4', full_name: 'Dana White', email: 'dana@example.com', phone_number: '1234567890' }, role: { id: '4', name: 'User', description: 'User' } },
+        { user: { id: '5', full_name: 'Eve Black', email: 'eve@example.com', phone_number: '1234567890' }, role: { id: '5', name: 'User', description: 'User' } },
+        { user: { id: '6', full_name: 'Frank Green', email: 'frank@example.com', phone_number: '1234567890' }, role: { id: '6', name: 'User', description: 'User' } },
       ],
     },
-  ]
+  ];
+  const membersByTeam = teams.reduce((acc: Record<number, { members: { user: { id: string, full_name: string, email: string, phone_number: string }, role: { id: string, name: string, description: string } }[], extraCount: number }>, team) => {
+    const members = team.members.slice(0, 3);
+    const extraCount = team.members.length - 3;
+    acc[team.id] = {
+      members,
+      extraCount,
+    }
+    return acc
+  }, {} as Record<number, { members: { user: { id: string, full_name: string, email: string, phone_number: string }, role: { id: string, name: string, description: string } }[], extraCount: number }>)
 
   return (
     <div className="min-h-screen bg-gray-50 py-10">
       <div className="max-w-xl mx-auto space-y-6">
         {teams.map((team) => {
-          const firstThree = team.members.slice(0, 3)
-          const extraCount = team.members.length - 3
+          const { members, extraCount } = membersByTeam[team.id]
           return (
             <Card key={team.id} className="border border-gray-200 rounded-lg bg-white">
               <CardHeader>
@@ -54,13 +62,13 @@ function RouteComponent() {
               <CardContent>
                 <div className="flex items-center gap-2 justify-between">
                   <div className="flex items-center">
-                    {firstThree.map((member, idx) => (
+                     {members.map((member, idx) => (
                       <div
-                        key={member.id}
+                        key={member.user.id}
                         className={`w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-semibold text-sm border-2 border-white ${idx !== 0 ? '-ml-2' : ''}`}
-                        title={member.name}
+                        title={member.user.full_name}
                       >
-                        {getInitials(member.name)}
+                        {getInitials(member.user.full_name)}
                       </div>
                     ))}
                     {extraCount > 0 && (
