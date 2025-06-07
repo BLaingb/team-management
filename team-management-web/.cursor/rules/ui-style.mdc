@@ -1,0 +1,17 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# UI Style Guide for Forms and Lists
+
+- Use a minimal, clean, and modern design for all forms and lists.
+- Backgrounds should be plain (e.g., `bg-white` for cards, `bg-gray-50` for the app background).
+- Use a single column layout for forms, with tight vertical spacing (`space-y-4`).
+- Form fields should have clear, simple labels and use shadcn/ui components (e.g., `Input`, `Label`).
+- Buttons should be solid, rounded, and use the primary color (e.g., `bg-blue-600`).
+- Error messages should be small, red, and placed directly below the relevant field.
+- Use a card-like container for forms and lists, with subtle border and rounded corners (`border border-gray-200 rounded-lg`).
+- Avoid unnecessary shadows, gradients, or extra decoration.
+- For feedback, use toast notifications (see [login.tsx](mdc:src/routes/auth/login.tsx) for usage with `sonner`).
+- See [login.tsx](mdc:src/routes/auth/login.tsx) for a concrete example of a minimal, modern form.

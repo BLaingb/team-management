@@ -1,0 +1,16 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Forms Guide
+
+- Use shadcn/ui components for all form fields (e.g., `Input`, `Label`, `Button`).
+- Layout forms in a single column with tight vertical spacing (`space-y-4`).
+- Place forms inside a card-like container with `bg-white`, `border border-gray-200`, and `rounded-lg`.
+- Use clear, concise labels for each field.
+- Validate fields using zod schemas and show errors directly below the relevant field in small red text.
+- Use toast notifications for form-level feedback (e.g., authentication failure) via the `sonner` package. See [login.tsx](mdc:src/routes/auth/login.tsx) for usage.
+- Avoid extra decoration, gradients, or shadows—keep forms minimal and modern.
+- For submit actions, use a solid primary button (`bg-blue-600`).
+- See [login.tsx](mdc:src/routes/auth/login.tsx) for a full example of a minimal, validated form with toast feedback.

@@ -7,13 +7,9 @@ import { sessionQueryOptions } from '../lib/auth-client';
 export const Route = createFileRoute('/_authenticated')({
   beforeLoad: async ({ location }) => {
     const { queryClient } = getContext();
-    // Attempt to get session data.
-    // This will hit the backend if not cached or stale.
     const session = await queryClient.fetchQuery(sessionQueryOptions);
 
     if (!session) {
-      // If no session, redirect to login page.
-      // The `search` parameter is useful for redirecting back after successful login.
       throw redirect({
         to: '/auth/login',
         search: {
@@ -22,21 +18,15 @@ export const Route = createFileRoute('/_authenticated')({
       });
     }
 
-    // If session exists, pass it to the loader context for child routes if needed
     return { session };
   },
   component: AuthenticatedLayout,
 });
 
 function AuthenticatedLayout() {
-  // This layout will only render if the user is authenticated
   return (
     <div className="min-h-screen">
-      <header>
-        <h1>Protected App</h1>
-        {/* Navigation, Logout button, etc. */}
-      </header>
-      <Outlet /> {/* Renders the child route components */}
+      <Outlet />
     </div>
   );
 }
