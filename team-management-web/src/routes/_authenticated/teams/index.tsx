@@ -1,4 +1,6 @@
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useGetTeams } from '@/lib/team-client'
 import { createFileRoute } from '@tanstack/react-router'
 import { ChevronRight } from 'lucide-react'
 
@@ -14,31 +16,32 @@ function getInitials(name: string) {
     .toUpperCase()
 }
 
+function EmptyState() {
+  return (
+    <div className="min-h-screen bg-gray-50 py-10 flex items-center justify-center">
+      <div className="max-w-xl mx-auto space-y-6">
+        <div className="text-center text-gray-500">
+          <div className="text-2xl font-bold">No teams found</div>
+          <div className="text-gray-500 flex flex-col items-center justify-center">
+            You don't have any teams yet. Create a new team to get started.
+            {/* TODO: Add a link to the create team page */}
+            <Button variant="outline" className="mt-4">Create Team</Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function RouteComponent() {
-  // Mocked team data
-  const teams = [
-    {
-      id: 1,
-      name: 'Frontend Wizards',
-      description: 'Building beautiful and interactive user interfaces.',
-      members: [
-        { user: { id: '1', full_name: 'Alice Johnson', email: 'alice@example.com', phone_number: '1234567890' }, role: { id: '1', name: 'Admin', description: 'Admin' } },
-        { user: { id: '2', full_name: 'Bob Smith', email: 'bob@example.com', phone_number: '1234567890' }, role: { id: '2', name: 'User', description: 'User' } },
-      ],
-    },
-    {
-      id: 2,
-      name: 'Backend Ninjas',
-      description: 'Crafting robust and scalable backend systems.',
-      members: [
-        { user: { id: '3', full_name: 'Charlie Brown', email: 'charlie@example.com', phone_number: '1234567890' }, role: { id: '3', name: 'Admin', description: 'Admin' } },
-        { user: { id: '4', full_name: 'Dana White', email: 'dana@example.com', phone_number: '1234567890' }, role: { id: '4', name: 'User', description: 'User' } },
-        { user: { id: '5', full_name: 'Eve Black', email: 'eve@example.com', phone_number: '1234567890' }, role: { id: '5', name: 'User', description: 'User' } },
-        { user: { id: '6', full_name: 'Frank Green', email: 'frank@example.com', phone_number: '1234567890' }, role: { id: '6', name: 'User', description: 'User' } },
-      ],
-    },
-  ];
-  const membersByTeam = teams.reduce((acc: Record<number, { members: { user: { id: string, full_name: string, email: string, phone_number: string }, role: { id: string, name: string, description: string } }[], extraCount: number }>, team) => {
+  const { data: teams, isLoading } = useGetTeams();
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+  if (!teams || teams.length === 0) {
+    return <EmptyState />
+  }
+  const membersByTeam = teams.reduce((acc: Record<number, { members: { user: { id: number, full_name: string, email: string, phone_number: string }, role: { id: number, name: string, description: string } }[], extraCount: number }>, team) => {
     const members = team.members.slice(0, 3);
     const extraCount = team.members.length - 3;
     acc[team.id] = {
@@ -46,7 +49,7 @@ function RouteComponent() {
       extraCount,
     }
     return acc
-  }, {} as Record<number, { members: { user: { id: string, full_name: string, email: string, phone_number: string }, role: { id: string, name: string, description: string } }[], extraCount: number }>)
+  }, {} as Record<number, { members: { user: { id: number, full_name: string, email: string, phone_number: string }, role: { id: number, name: string, description: string } }[], extraCount: number }>)
 
   return (
     <div className="min-h-screen bg-gray-50 py-10">
