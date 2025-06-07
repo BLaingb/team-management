@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { teamClient } from '@/lib/team-client'
-import { createFileRoute } from '@tanstack/react-router'
+import { Link, createFileRoute } from '@tanstack/react-router'
 import { ChevronRight } from 'lucide-react'
 
 export const Route = createFileRoute('/_authenticated/teams/')({
@@ -81,7 +81,9 @@ function RouteComponent() {
                       </div>
                     )}
                   </div>
-                  <ChevronRight className="text-gray-400 w-8 h-8 mt-[-12%]" />
+                  <Link to='/teams/$teamId' params={{ teamId: team.id.toString() }} className="hover:text-gray-600 hover:cursor-pointer" >
+                    <ChevronRight className="text-gray-400 w-8 h-8 mt-[-12%]" />
+                  </Link>
                 </div>
               </CardContent>
             </Card>

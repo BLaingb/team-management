@@ -18,6 +18,7 @@ import { Route as AuthLoginImport } from './routes/auth/login'
 import { Route as AuthenticatedTeamsIndexImport } from './routes/_authenticated/teams/index'
 import { Route as DemoFormSimpleImport } from './routes/demo.form.simple'
 import { Route as DemoFormAddressImport } from './routes/demo.form.address'
+import { Route as AuthenticatedTeamsTeamIdImport } from './routes/_authenticated/teams/$teamId'
 
 // Create/Update Routes
 
@@ -62,6 +63,12 @@ const DemoFormAddressRoute = DemoFormAddressImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AuthenticatedTeamsTeamIdRoute = AuthenticatedTeamsTeamIdImport.update({
+  id: '/teams/$teamId',
+  path: '/teams/$teamId',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -94,6 +101,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoTanstackQueryImport
       parentRoute: typeof rootRoute
     }
+    '/_authenticated/teams/$teamId': {
+      id: '/_authenticated/teams/$teamId'
+      path: '/teams/$teamId'
+      fullPath: '/teams/$teamId'
+      preLoaderRoute: typeof AuthenticatedTeamsTeamIdImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/demo/form/address': {
       id: '/demo/form/address'
       path: '/demo/form/address'
@@ -121,10 +135,12 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedTeamsTeamIdRoute: typeof AuthenticatedTeamsTeamIdRoute
   AuthenticatedTeamsIndexRoute: typeof AuthenticatedTeamsIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedTeamsTeamIdRoute: AuthenticatedTeamsTeamIdRoute,
   AuthenticatedTeamsIndexRoute: AuthenticatedTeamsIndexRoute,
 }
 
@@ -137,6 +153,7 @@ export interface FileRoutesByFullPath {
   '': typeof AuthenticatedRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/teams/$teamId': typeof AuthenticatedTeamsTeamIdRoute
   '/demo/form/address': typeof DemoFormAddressRoute
   '/demo/form/simple': typeof DemoFormSimpleRoute
   '/teams': typeof AuthenticatedTeamsIndexRoute
@@ -147,6 +164,7 @@ export interface FileRoutesByTo {
   '': typeof AuthenticatedRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/teams/$teamId': typeof AuthenticatedTeamsTeamIdRoute
   '/demo/form/address': typeof DemoFormAddressRoute
   '/demo/form/simple': typeof DemoFormSimpleRoute
   '/teams': typeof AuthenticatedTeamsIndexRoute
@@ -158,6 +176,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/_authenticated/teams/$teamId': typeof AuthenticatedTeamsTeamIdRoute
   '/demo/form/address': typeof DemoFormAddressRoute
   '/demo/form/simple': typeof DemoFormSimpleRoute
   '/_authenticated/teams/': typeof AuthenticatedTeamsIndexRoute
@@ -170,6 +189,7 @@ export interface FileRouteTypes {
     | ''
     | '/auth/login'
     | '/demo/tanstack-query'
+    | '/teams/$teamId'
     | '/demo/form/address'
     | '/demo/form/simple'
     | '/teams'
@@ -179,6 +199,7 @@ export interface FileRouteTypes {
     | ''
     | '/auth/login'
     | '/demo/tanstack-query'
+    | '/teams/$teamId'
     | '/demo/form/address'
     | '/demo/form/simple'
     | '/teams'
@@ -188,6 +209,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth/login'
     | '/demo/tanstack-query'
+    | '/_authenticated/teams/$teamId'
     | '/demo/form/address'
     | '/demo/form/simple'
     | '/_authenticated/teams/'
@@ -236,6 +258,7 @@ export const routeTree = rootRoute
     "/_authenticated": {
       "filePath": "_authenticated.tsx",
       "children": [
+        "/_authenticated/teams/$teamId",
         "/_authenticated/teams/"
       ]
     },
@@ -244,6 +267,10 @@ export const routeTree = rootRoute
     },
     "/demo/tanstack-query": {
       "filePath": "demo.tanstack-query.tsx"
+    },
+    "/_authenticated/teams/$teamId": {
+      "filePath": "_authenticated/teams/$teamId.tsx",
+      "parent": "/_authenticated"
     },
     "/demo/form/address": {
       "filePath": "demo.form.address.tsx"

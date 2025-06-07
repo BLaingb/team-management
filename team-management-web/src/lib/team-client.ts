@@ -25,6 +25,9 @@ const teamSchema = z.object({
 	members: z.array(teamMemberSchema),
 });
 
+export type Team = z.infer<typeof teamSchema>;
+export type TeamMember = z.infer<typeof teamMemberSchema>;
+
 export const teamClient = {
 	getTeams: async () => {
 		try {
@@ -41,11 +44,33 @@ export const teamClient = {
 			throw error;
 		}
 	},
+    getTeam: async (teamId: number) => {
+        try {
+            const response = await fetch(`${env.VITE_API_URL}/api/teams/${teamId}/`, {
+                credentials: "include",
+            });
+            if (!response.ok) {
+                throw new Error("Failed to fetch team");
+            }
+            const data = await response.json();
+            return teamSchema.parse(data);
+        } catch (error) {
+            console.error("Error fetching team:", error);
+            throw error;
+        }
+    }
 };
 
 export const useGetTeams = () => {
     return useQuery({
         queryKey: TEAMS_QUERY_KEY,
         queryFn: teamClient.getTeams,
+    });
+};
+
+export const useGetTeam = (teamId: number) => {
+    return useQuery({
+        queryKey: ["team", teamId],
+        queryFn: () => teamClient.getTeam(teamId),
     });
 };
