@@ -1,0 +1,26 @@
+{
+    "name": "Team Member Management",
+    "dockerComposeFile": [
+        "../docker-compose.yml",
+        "docker-compose.yml"
+    ],
+    "service": "web",
+    "workspaceFolder": "/app",
+    "forwardPorts": [8000],
+    "overrideCommand": true,
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "batisteo.django",
+                "esbenp.prettier-vscode"
+            ],
+            "settings": {
+                "python.defaultInterpreterPath": "/usr/local/bin/python",
+                "python.languageServer": "Pylance"
+            }
+        }
+    },
+    // Settings to apply to VS Code inside the container
+    "remoteUser": "root"
+}
