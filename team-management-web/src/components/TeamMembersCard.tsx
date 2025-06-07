@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { getInitials } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { ChevronRight, PlusIcon } from "lucide-react";
 import { Button } from "./ui/button";
@@ -24,14 +25,6 @@ export interface Team {
 	name: string;
 	description: string;
 	members: TeamMember[];
-}
-
-function getInitials(name: string) {
-	return name
-		.split(" ")
-		.map((n) => n[0])
-		.join("")
-		.toUpperCase();
 }
 
 export function TeamMembersCard({ team }: { team: Team }) {
