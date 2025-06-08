@@ -1,31 +1,13 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import type { Team } from "@/lib/team-client";
 import { getInitials } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { ChevronRight, PlusIcon } from "lucide-react";
 import { Button } from "./ui/button";
 
-export interface TeamMember {
-	user: {
-		id: number;
-		full_name: string;
-		email: string;
-		phone_number: string;
-	};
-	role: {
-		id: number;
-		name: string;
-		description: string;
-	};
-}
 
-export interface Team {
-	id: number;
-	name: string;
-	description: string;
-	members: TeamMember[];
-}
 
 export function TeamMembersCard({ team }: { team: Team }) {
 	return (

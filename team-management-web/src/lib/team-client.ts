@@ -36,9 +36,24 @@ const teamMemberInvitationSchema = z.object({
 	role: z.number(),
 });
 
+const teamInvitationSchema = z.object({
+	id: z.number(),
+	team: z.number(),
+	email: z.string(),
+	first_name: z.string(),
+	last_name: z.string(),
+	phone_number: z.string(),
+	role: z.number(),
+	status: z.string(),
+	created_at: z.string(),
+	expires_at: z.string(),
+	updated_at: z.string(),
+});
+
 export type Team = z.infer<typeof teamSchema>;
 export type TeamMember = z.infer<typeof teamMemberSchema>;
 export type TeamMemberInvitation = z.infer<typeof teamMemberInvitationSchema>;
+export type TeamInvitation = z.infer<typeof teamInvitationSchema>;
 
 export const teamClient = {
 	getTeams: async () => {
@@ -113,6 +128,21 @@ export const teamClient = {
             throw error;
         }
     },
+	getActiveInvitations: async (teamId: number) => {
+		try {
+			const response = await fetch(`${env.VITE_API_URL}/api/teams/${teamId}/active-invitations/`, {
+				credentials: "include",
+			});
+			if (!response.ok) {
+				throw new Error("Failed to fetch active invitations");
+			}
+			const data = await response.json();
+			return teamInvitationSchema.array().parse(data);
+		} catch (error) {
+			console.error("Error fetching active invitations:", error);
+			throw error;
+		}
+	},
 };
 
 export const useGetTeams = () => {
