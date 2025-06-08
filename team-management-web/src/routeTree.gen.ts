@@ -18,6 +18,7 @@ import { Route as AuthLoginImport } from './routes/auth/login'
 import { Route as AuthenticatedTeamsIndexImport } from './routes/_authenticated/teams/index'
 import { Route as DemoFormSimpleImport } from './routes/demo.form.simple'
 import { Route as DemoFormAddressImport } from './routes/demo.form.address'
+import { Route as AuthenticatedTeamsAddMemberImport } from './routes/_authenticated/teams/add-member'
 import { Route as AuthenticatedTeamsTeamIdImport } from './routes/_authenticated/teams/$teamId'
 
 // Create/Update Routes
@@ -62,6 +63,13 @@ const DemoFormAddressRoute = DemoFormAddressImport.update({
   path: '/demo/form/address',
   getParentRoute: () => rootRoute,
 } as any)
+
+const AuthenticatedTeamsAddMemberRoute =
+  AuthenticatedTeamsAddMemberImport.update({
+    id: '/teams/add-member',
+    path: '/teams/add-member',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 const AuthenticatedTeamsTeamIdRoute = AuthenticatedTeamsTeamIdImport.update({
   id: '/teams/$teamId',
@@ -108,6 +116,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTeamsTeamIdImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/teams/add-member': {
+      id: '/_authenticated/teams/add-member'
+      path: '/teams/add-member'
+      fullPath: '/teams/add-member'
+      preLoaderRoute: typeof AuthenticatedTeamsAddMemberImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/demo/form/address': {
       id: '/demo/form/address'
       path: '/demo/form/address'
@@ -136,11 +151,13 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedTeamsTeamIdRoute: typeof AuthenticatedTeamsTeamIdRoute
+  AuthenticatedTeamsAddMemberRoute: typeof AuthenticatedTeamsAddMemberRoute
   AuthenticatedTeamsIndexRoute: typeof AuthenticatedTeamsIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedTeamsTeamIdRoute: AuthenticatedTeamsTeamIdRoute,
+  AuthenticatedTeamsAddMemberRoute: AuthenticatedTeamsAddMemberRoute,
   AuthenticatedTeamsIndexRoute: AuthenticatedTeamsIndexRoute,
 }
 
@@ -154,6 +171,7 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof AuthLoginRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/teams/$teamId': typeof AuthenticatedTeamsTeamIdRoute
+  '/teams/add-member': typeof AuthenticatedTeamsAddMemberRoute
   '/demo/form/address': typeof DemoFormAddressRoute
   '/demo/form/simple': typeof DemoFormSimpleRoute
   '/teams': typeof AuthenticatedTeamsIndexRoute
@@ -165,6 +183,7 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/teams/$teamId': typeof AuthenticatedTeamsTeamIdRoute
+  '/teams/add-member': typeof AuthenticatedTeamsAddMemberRoute
   '/demo/form/address': typeof DemoFormAddressRoute
   '/demo/form/simple': typeof DemoFormSimpleRoute
   '/teams': typeof AuthenticatedTeamsIndexRoute
@@ -177,6 +196,7 @@ export interface FileRoutesById {
   '/auth/login': typeof AuthLoginRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/_authenticated/teams/$teamId': typeof AuthenticatedTeamsTeamIdRoute
+  '/_authenticated/teams/add-member': typeof AuthenticatedTeamsAddMemberRoute
   '/demo/form/address': typeof DemoFormAddressRoute
   '/demo/form/simple': typeof DemoFormSimpleRoute
   '/_authenticated/teams/': typeof AuthenticatedTeamsIndexRoute
@@ -190,6 +210,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/demo/tanstack-query'
     | '/teams/$teamId'
+    | '/teams/add-member'
     | '/demo/form/address'
     | '/demo/form/simple'
     | '/teams'
@@ -200,6 +221,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/demo/tanstack-query'
     | '/teams/$teamId'
+    | '/teams/add-member'
     | '/demo/form/address'
     | '/demo/form/simple'
     | '/teams'
@@ -210,6 +232,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/demo/tanstack-query'
     | '/_authenticated/teams/$teamId'
+    | '/_authenticated/teams/add-member'
     | '/demo/form/address'
     | '/demo/form/simple'
     | '/_authenticated/teams/'
@@ -259,6 +282,7 @@ export const routeTree = rootRoute
       "filePath": "_authenticated.tsx",
       "children": [
         "/_authenticated/teams/$teamId",
+        "/_authenticated/teams/add-member",
         "/_authenticated/teams/"
       ]
     },
@@ -270,6 +294,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/teams/$teamId": {
       "filePath": "_authenticated/teams/$teamId.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/teams/add-member": {
+      "filePath": "_authenticated/teams/add-member.tsx",
       "parent": "/_authenticated"
     },
     "/demo/form/address": {

@@ -32,9 +32,11 @@ export function TeamMembersCard({ team }: { team: Team }) {
 		<Card className="bg-white border border-gray-200 rounded-lg p-6 w-full max-w-md mx-auto">
 			<div className="flex flex-row justify-between items-center">
 				<div className="text-lg font-semibold">Team members</div>
-				<Button variant="outline" size="sm">
-					<PlusIcon className="w-4 h-4" />
-					Add member
+				<Button asChild variant="outline" size="sm">
+					<Link to="/teams/add-member" search={{ teamId: team.id.toString() }}>
+						<PlusIcon className="w-4 h-4" />
+						Add member
+					</Link>
 				</Button>
 			</div>
 			<div className="text-gray-500 text-sm">

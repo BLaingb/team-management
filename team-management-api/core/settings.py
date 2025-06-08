@@ -184,3 +184,17 @@ CORS_ALLOWED_ORIGINS = os.environ.get(
     "CORS_ALLOWED_ORIGINS", "http://localhost:3000"
 ).split(",")
 CORS_ALLOW_CREDENTIALS = True
+
+# Email
+ENABLE_EMAIL = os.environ.get("ENABLE_EMAIL", "False").lower() in ("true", "1")
+if ENABLE_EMAIL:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+RESEND_SMTP_PORT = 587
+RESEND_SMTP_USERNAME = os.environ.get("RESEND_SMTP_USERNAME")
+RESEND_SMTP_HOST = "smtp.resend.com"
+RESEND_SMTP_API_KEY = os.environ.get("RESEND_SMTP_API_KEY")
+FROM_EMAIL = os.environ.get("FROM_EMAIL")
+
+FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:3000")

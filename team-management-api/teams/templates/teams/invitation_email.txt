@@ -1,0 +1,8 @@
+You have been invited to join {{ inviter_name }}'s team {{ team_name }}.
+
+You can accept or reject the invitation by clicking the links below:
+Accept: {{ accept_url }}
+Reject: {{ reject_url }}
+
+You have {{ expiry_days }} days to accept or reject the invitation.
+If you don't respond, the invitation will expire. 
