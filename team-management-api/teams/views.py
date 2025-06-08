@@ -5,14 +5,30 @@ from utils.emailsender import email_sender
 from datetime import timedelta
 from django.utils import timezone
 from django.template.loader import render_to_string
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.exceptions import PermissionDenied
+from .permissions import user_has_team_permission, HasTeamPermission
 
 
 class TeamViewSet(viewsets.ModelViewSet):
     serializer_class = TeamSerializer
+    permission_classes = [HasTeamPermission]
+    required_permission = "team:view"
 
     def get_queryset(self):
         user = self.request.user
         return Team.objects.filter(teammember__user=user)
+
+    def get_permissions(self):
+        if self.action in ["update", "partial_update"]:
+            self.required_permission = "team:update"
+        elif self.action == "destroy":
+            self.required_permission = "team:delete"
+        else:
+            self.required_permission = "team:view"
+        return super().get_permissions()
 
 
 class TeamRoleViewSet(viewsets.ReadOnlyModelViewSet):
@@ -23,6 +39,8 @@ class TeamRoleViewSet(viewsets.ReadOnlyModelViewSet):
 class TeamInvitationCreateView(generics.CreateAPIView):
     queryset = TeamInvitation.objects.all()
     serializer_class = TeamInvitationSerializer
+    permission_classes = [HasTeamPermission]
+    required_permission = "members:add"
 
     def perform_create(self, serializer):
         expires_at = timezone.now() + timedelta(days=15)
@@ -43,3 +61,18 @@ class TeamInvitationCreateView(generics.CreateAPIView):
             html_body,
             plain_body=plain_body,
         )
+
+
+class TeamActiveInvitationsView(APIView):
+    permission_classes = [HasTeamPermission]
+    required_permission = "team:view"
+
+    def get(self, request, team_id):
+        try:
+            team = Team.objects.get(id=team_id)
+        except Team.DoesNotExist:
+            return Response({"detail": "Team not found."}, status=status.HTTP_404_NOT_FOUND)
+        self.check_object_permissions(request, team)
+        invitations = TeamInvitation.objects.active_invitations_for_team(team)
+        serializer = TeamInvitationSerializer(invitations, many=True)
+        return Response(serializer.data)

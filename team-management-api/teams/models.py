@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.conf import settings
+from django.utils import timezone
 
 UserModel = get_user_model()
 
@@ -49,6 +50,9 @@ class TeamInvitationManager(models.Manager):
         return self.filter(
             team=team, email=email, status__in=["pending", "accepted"]
         ).exists()
+
+    def active_invitations_for_team(self, team):
+        return self.filter(team=team, status="pending", expires_at__gt=timezone.now())
 
 
 class TeamInvitation(models.Model):
