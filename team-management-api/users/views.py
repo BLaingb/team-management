@@ -49,15 +49,15 @@ class HttpOnlyCookieTokenObtainPairView(TokenObtainPairView):
             expires=settings.SIMPLE_JWT["ACCESS_TOKEN_LIFETIME"],
             secure=settings.SIMPLE_JWT[
                 "AUTH_COOKIE_SECURE"
-            ],  # True in production (HTTPS)
+            ],
             httponly=True,
             samesite=settings.SIMPLE_JWT[
                 "AUTH_COOKIE_SAMESITE"
-            ],  # 'Lax' for most cases
+            ],
         )
 
         response.set_cookie(
-            key=settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"],  # We will define this
+            key=settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"],
             value=str(refresh_token),
             expires=settings.SIMPLE_JWT["REFRESH_TOKEN_LIFETIME"],
             secure=settings.SIMPLE_JWT["AUTH_COOKIE_SECURE"],
@@ -65,7 +65,6 @@ class HttpOnlyCookieTokenObtainPairView(TokenObtainPairView):
             samesite=settings.SIMPLE_JWT["AUTH_COOKIE_SAMESITE"],
         )
 
-        # Get user data
         user_data = UserSerializer(serializer.user).data
 
         response.data = user_data
