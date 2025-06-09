@@ -28,9 +28,11 @@ export default function Header() {
           <Link to="/">Home</Link>
         </div>
 
-        <div className="px-2 font-bold">
-          <Link to="/teams">Teams</Link>
-        </div>
+        {session && (
+          <div className="px-2 font-bold">
+            <Link to="/teams">Teams</Link>
+          </div>
+        )}
       </nav>
       {!isLoading && session && (
         <Button onClick={handleLogout} className="bg-gray-700 hover:bg-gray-900 text-white rounded-md text-sm px-4 py-2">
