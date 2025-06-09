@@ -1,8 +1,8 @@
-
 import { queryOptions } from '@tanstack/react-query';
 import { z } from 'zod';
 import { env } from '../env';
 import { getContext } from '../integrations/tanstack-query/root-provider';
+import { apiClient } from './api-client';
 
 const SESSION_QUERY_KEY = ['session'];
 
@@ -19,7 +19,7 @@ const { queryClient } = getContext();
 export const authClient = {
   getSession: async () => {
     try {
-      const response = await fetch(`${env.VITE_API_URL}/api/token/verify/`, { method: 'POST', credentials: 'include' });
+      const response = await apiClient(`${env.VITE_API_URL}/api/token/verify/`, { method: 'POST' });
       if (!response.ok) {
         return null;
       }
@@ -33,11 +33,10 @@ export const authClient = {
 
   login: async (credentials: { email: string; password: string }) => {
     try {
-        const response = await fetch(`${env.VITE_API_URL}/api/token/`, {
+        const response = await apiClient(`${env.VITE_API_URL}/api/token/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(credentials),
-        credentials: 'include',
         });
         if (!response.ok) {
             throw new Error('Login failed');
@@ -52,9 +51,8 @@ export const authClient = {
   },
 
   logout: async () => {
-    const response = await fetch(`${env.VITE_API_URL}/api/logout/`, {
+    const response = await apiClient(`${env.VITE_API_URL}/api/logout/`, {
       method: 'POST',
-      credentials: 'include',
     });
     if (!response.ok) {
       throw new Error('Logout failed');
@@ -64,11 +62,10 @@ export const authClient = {
 
   signup: async (userData: { email: string; password: string; first_name: string; last_name: string; phone_number: string, password2: string }) => {
     try {
-      const response = await fetch(`${env.VITE_API_URL}/api/signup/`, {
+      const response = await apiClient(`${env.VITE_API_URL}/api/signup/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData),
-        credentials: 'include',
       });
       if (!response.ok) {
         throw new Error('Signup failed');

@@ -1,6 +1,7 @@
 import { env } from "@/env";
 import { useQuery } from "@tanstack/react-query";
 import { z } from "zod";
+import { apiClient } from "./api-client";
 
 const TEAMS_QUERY_KEY = ["teams"];
 
@@ -76,8 +77,7 @@ export type TeamPermission = z.infer<typeof teamPermissionSchema>;
 export const teamClient = {
     createTeam: async (team: Omit<Team, "id" | "members">) => {
         try {
-            const response = await fetch(`${env.VITE_API_URL}/api/teams/`, {
-                credentials: "include",
+            const response = await apiClient(`${env.VITE_API_URL}/api/teams/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -95,9 +95,7 @@ export const teamClient = {
     },
 	getTeams: async () => {
 		try {
-			const response = await fetch(`${env.VITE_API_URL}/api/teams/`, {
-				credentials: "include",
-			});
+			const response = await apiClient(`${env.VITE_API_URL}/api/teams/`);
 			if (!response.ok) {
 				throw new Error("Failed to fetch teams");
 			}
@@ -110,9 +108,7 @@ export const teamClient = {
 	},
 	getTeam: async (teamId: number) => {
 		try {
-			const response = await fetch(`${env.VITE_API_URL}/api/teams/${teamId}/`, {
-				credentials: "include",
-			});
+			const response = await apiClient(`${env.VITE_API_URL}/api/teams/${teamId}/`);
 			if (!response.ok) {
 				throw new Error("Failed to fetch team");
 			}
@@ -125,9 +121,7 @@ export const teamClient = {
 	},
     getTeamPermissions: async (teamId: number) => {
         try {
-            const response = await fetch(`${env.VITE_API_URL}/api/teams/${teamId}/permissions/`, {
-                credentials: "include",
-            });
+            const response = await apiClient(`${env.VITE_API_URL}/api/teams/${teamId}/permissions/`);
             if (!response.ok) {
                 throw new Error("Failed to fetch team permissions");
             }
@@ -138,11 +132,10 @@ export const teamClient = {
     },
 	addTeamMember: async (invitation: TeamMemberInvitation) => {
 		try {
-			const response = await fetch(
+			const response = await apiClient(
 				`${env.VITE_API_URL}/api/team-invitations/`,
 				{
 					method: "POST",
-					credentials: "include",
 					headers: {
 						"Content-Type": "application/json",
 					},
@@ -165,9 +158,7 @@ export const teamClient = {
 	},
     getTeamRoles: async () => {
         try {
-            const response = await fetch(`${env.VITE_API_URL}/api/team-roles/`, {
-                credentials: "include",
-            });
+            const response = await apiClient(`${env.VITE_API_URL}/api/team-roles/`);
             if (!response.ok) {
                 throw new Error("Failed to fetch team roles");
             }
@@ -180,9 +171,7 @@ export const teamClient = {
     },
 	getActiveInvitations: async (teamId: number) => {
 		try {
-			const response = await fetch(`${env.VITE_API_URL}/api/teams/${teamId}/active-invitations/`, {
-				credentials: "include",
-			});
+			const response = await apiClient(`${env.VITE_API_URL}/api/teams/${teamId}/active-invitations/`);
 			if (!response.ok) {
 				throw new Error("Failed to fetch active invitations");
 			}
@@ -195,9 +184,7 @@ export const teamClient = {
 	},
     getTeamInvitation: async (invitationId: number) => {
         try {
-            const response = await fetch(`${env.VITE_API_URL}/api/team-invitations/${invitationId}`, {
-                credentials: "include",
-            });
+            const response = await apiClient(`${env.VITE_API_URL}/api/team-invitations/${invitationId}`);
             if (!response.ok) {
                 throw new Error("Failed to fetch team invitation");
             }
@@ -210,8 +197,7 @@ export const teamClient = {
     },
     acceptTeamInvitation: async (invitationId: number) => {
         try {
-            const response = await fetch(`${env.VITE_API_URL}/api/team-invitations/${invitationId}/accept/`, {
-                credentials: "include",
+            const response = await apiClient(`${env.VITE_API_URL}/api/team-invitations/${invitationId}/accept/`, {
                 method: "POST",
             });
             if (!response.ok) {
@@ -225,8 +211,7 @@ export const teamClient = {
     },
     rejectTeamInvitation: async (invitationId: number) => {
         try {
-            const response = await fetch(`${env.VITE_API_URL}/api/team-invitations/${invitationId}/reject/`, {
-                credentials: "include",
+            const response = await apiClient(`${env.VITE_API_URL}/api/team-invitations/${invitationId}/reject/`, {
                 method: "POST",
             });
             if (!response.ok) {
@@ -240,9 +225,7 @@ export const teamClient = {
     },
     getTeamMember: async (teamId: number, memberId: number) => {
         try {
-            const response = await fetch(`${env.VITE_API_URL}/api/teams/${teamId}/members/${memberId}/`, {
-                credentials: "include",
-            });
+            const response = await apiClient(`${env.VITE_API_URL}/api/teams/${teamId}/members/${memberId}/`);
             if (!response.ok) {
                 throw new Error("Failed to fetch team member");
             }
@@ -255,8 +238,7 @@ export const teamClient = {
     },
     updateTeamMemberRole: async (teamId: number, memberId: number, roleId: number) => {
         try {
-            const response = await fetch(`${env.VITE_API_URL}/api/teams/${teamId}/members/${memberId}/`, {
-                credentials: "include",
+            const response = await apiClient(`${env.VITE_API_URL}/api/teams/${teamId}/members/${memberId}/`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -274,8 +256,7 @@ export const teamClient = {
     },
     deleteTeamMember: async (teamId: number, memberId: number) => {
         try {
-            const response = await fetch(`${env.VITE_API_URL}/api/teams/${teamId}/members/${memberId}/`, {
-                credentials: "include",
+            const response = await apiClient(`${env.VITE_API_URL}/api/teams/${teamId}/members/${memberId}/`, {
                 method: "DELETE",
             });
             if (!response.ok) {
@@ -287,7 +268,6 @@ export const teamClient = {
             throw error;
         }
     },
-                credentials: "include",
 };
 
 export const useGetTeams = () => {

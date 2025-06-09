@@ -4,6 +4,7 @@ import { type Team, useGetTeamPermissions } from "@/lib/team-client";
 import { hasTeamPermission } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { PlusIcon } from "lucide-react";
+import { Fragment } from "react/jsx-runtime";
 import { Button } from "../ui/button";
 import { TeamMembersItem } from "./TeamMembersItem";
 
@@ -34,10 +35,10 @@ export function TeamMembersCard({ team }: { team: Team }) {
 			</div>
 			<div className="space-y-4">
 				{team.members.map((member, idx) => (
-                    <>
-                        <TeamMembersItem key={member.user.id} teamId={team.id} member={member} />
+                    <Fragment key={member.user.id}>
+                        <TeamMembersItem teamId={team.id} member={member} />
                         {idx < team.members.length - 1 && <Separator className="my-4" />}
-                    </>
+                    </Fragment>
 				))}
 			</div>
 		</Card>
