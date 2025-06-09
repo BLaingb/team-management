@@ -38,6 +38,11 @@ class TeamViewSet(viewsets.ModelViewSet):
             self.required_permission = "team:view"
         return super().get_permissions()
 
+    def perform_create(self, serializer):
+        team = serializer.save()
+        admin_role = TeamRole.objects.get(name="Admin")
+        TeamMember.objects.create(team=team, user=self.request.user, role=admin_role)
+
 
 class TeamRoleViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = TeamRole.objects.all()

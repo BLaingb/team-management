@@ -6,8 +6,11 @@ This project is done as part of Instawork's recruitment process. While the requi
 
 ### Backend
 Built on Django and Django Rest Framework.
+
 ### Frontend
-Built on React, using Tanstack Router for routing, Tanstack Query for data fetching, and ShadCN for UI.
+Built on React, using Tanstack Router for routing, Tanstack Query for data fetching, and ShadCN for UI. Why Vite & Tanstack instead of something like NextJS? Two reasons for my choice:
+1. Seems like an "internal app" use case, with no need for SEO optimizations and SSR/SSG features of larger frameworks, like Next/Remix/Nuxt/etc. A simple SPA with good routing seemed like a better fit.
+1. I've been meaning to try Tanstack Router for a while, this just seemed like a good opportunity for it.
 
 ## Running Locally
 ### Backend
@@ -42,6 +45,6 @@ As the app is dealing with sensitive details (team members' contact details), I 
 Given each team member has access to the app, and their own data, having admins updating another user's personal information didn't quite fit IMO. While this could not be the case, for the moment, it was solved by allowing the user to set up their details on signup, being pre-filled by the data on the invitation sent. In this scenario, Admins can still update other members' role for their team.
 
 ## TODO
-- When creating a team, automatically set the current user as a member with Admin role
+- Permission management on FE
 - Email sending on background workers
 - Cron to invalidate/expire invitations
