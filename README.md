@@ -45,8 +45,8 @@ $$
 Given each team member has access to the app, and their own data, having admins updating another user's personal information didn't quite fit IMO. While this could not be the case, for the moment, it was solved by allowing the user to set up their details on signup, being pre-filled by the data on the invitation sent. In this scenario, Admins can still update other members' role for their team.
 
 ## TODO
-- Permission management on FE
 - Refresh session on FE
 - Email sending on background workers
 - Cron to invalidate/expire invitations
 - Generic API error management
+- Reuse&Colocate zod schemas accross APIs and forms

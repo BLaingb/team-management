@@ -60,11 +60,18 @@ const teamInvitationDetailSchema = teamInvitationSchema.extend({
     user_exists: z.boolean(),
 });
 
+const teamPermissionSchema = z.object({
+    team: z.number(),
+    role: z.string(),
+    permissions: z.array(z.string()),
+});
+
 export type Team = z.infer<typeof teamSchema>;
 export type TeamMember = z.infer<typeof teamMemberSchema>;
 export type TeamMemberInvitation = z.infer<typeof teamMemberInvitationSchema>;
 export type TeamInvitation = z.infer<typeof teamInvitationSchema>;
 export type TeamInvitationDetail = z.infer<typeof teamInvitationDetailSchema>;
+export type TeamPermission = z.infer<typeof teamPermissionSchema>;
 
 export const teamClient = {
     createTeam: async (team: Omit<Team, "id" | "members">) => {
@@ -116,6 +123,19 @@ export const teamClient = {
 			throw error;
 		}
 	},
+    getTeamPermissions: async (teamId: number) => {
+        try {
+            const response = await fetch(`${env.VITE_API_URL}/api/teams/${teamId}/permissions/`, {
+                credentials: "include",
+            });
+            if (!response.ok) {
+                throw new Error("Failed to fetch team permissions");
+            }
+            const data = await response.json();
+            return teamPermissionSchema.parse(data);
+        } catch (error) {
+        }
+    },
 	addTeamMember: async (invitation: TeamMemberInvitation) => {
 		try {
 			const response = await fetch(
@@ -281,5 +301,12 @@ export const useGetTeam = (teamId: number) => {
 	return useQuery({
 		queryKey: ["team", teamId],
 		queryFn: () => teamClient.getTeam(teamId),
+	});
+};
+
+export const useGetTeamPermissions = (teamId: number) => {
+	return useQuery({
+		queryKey: ["team-permissions", teamId],
+		queryFn: () => teamClient.getTeamPermissions(teamId),
 	});
 };

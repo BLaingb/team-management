@@ -1,6 +1,7 @@
 import { RadioGroupField } from "@/components/FormComponents";
 import { useAppForm } from "@/hooks/useAppForm";
-import { teamClient } from "@/lib/team-client";
+import { teamClient, useGetTeamPermissions } from "@/lib/team-client";
+import { hasTeamPermission } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate, useParams } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -31,6 +32,10 @@ function AddMemberPage() {
     queryKey: ["team-roles"],
     queryFn: teamClient.getTeamRoles,
   });
+  const { data: teamPermissions } = useGetTeamPermissions(teamIdNum);
+  if (!hasTeamPermission("members:create", teamPermissions?.permissions)) {
+    navigate({ to: "/teams/$teamId", params: { teamId: teamIdNum.toString() } });
+  }
 
   const form = useAppForm({
     defaultValues: {

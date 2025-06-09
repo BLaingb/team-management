@@ -5,7 +5,8 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { useAppForm } from "@/hooks/useAppForm";
-import { teamClient } from "@/lib/team-client";
+import { teamClient, useGetTeamPermissions } from "@/lib/team-client";
+import { hasTeamPermission } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate, useParams } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -42,6 +43,10 @@ function EditMemberPage() {
     queryKey: ["team-roles"],
     queryFn: teamClient.getTeamRoles,
   });
+  const { data: teamPermissions } = useGetTeamPermissions(teamIdNum);
+  if (!hasTeamPermission("members:update", teamPermissions?.permissions)) {
+    navigate({ to: "/teams/$teamId", params: { teamId: teamIdNum.toString() } });
+  }
 
   const form = useAppForm({
     defaultValues: { role: member?.role?.id.toString() || "" },

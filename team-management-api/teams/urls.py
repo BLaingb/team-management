@@ -11,20 +11,22 @@ from .views import (
     AcceptInvitationView,
     RejectInvitationView,
     TeamMemberViewSet,
+    MyTeamPermissionsView,
 )
 
 router = DefaultRouter()
 router.register(r"teams", TeamViewSet, basename="team")
 router.register(r"team-roles", TeamRoleViewSet, basename="team-role")
 
-# Nested router for team members
 teams_router = NestedDefaultRouter(router, r"teams", lookup="team")
 teams_router.register(r"members", TeamMemberViewSet, basename="team-members")
+
 
 urlpatterns = (
     router.urls
     + teams_router.urls
-    + [
+    + [ # Specific paths that don't follow ViewSet patterns
+        # Team Invitations
         path(
             "team-invitations/",
             TeamInvitationCreateView.as_view(),
@@ -54,6 +56,12 @@ urlpatterns = (
             "active-invitations/",
             MyActiveInvitationsView.as_view(),
             name="my-active-invitations",
+        ),
+        # Team Permissions
+        path(
+            "teams/<int:team_id>/permissions/",
+            MyTeamPermissionsView.as_view(),
+            name="my-team-permissions",
         ),
     ]
 )

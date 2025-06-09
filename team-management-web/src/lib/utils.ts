@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import type { TeamPermission } from './team-client'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -11,5 +12,9 @@ export function getInitials(name: string) {
 		.map((n) => n[0])
 		.join("")
 		.toUpperCase();
+}
+
+export function hasTeamPermission(permission: string, teamPermissions: TeamPermission['permissions'] = []): boolean {
+  return teamPermissions.includes(permission);
 }
 
