@@ -2,7 +2,7 @@ import { RadioGroupField } from "@/components/FormComponents";
 import { useAppForm } from "@/hooks/useAppForm";
 import { teamClient } from "@/lib/team-client";
 import { useQuery } from "@tanstack/react-query";
-import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useParams } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -14,28 +14,14 @@ const formSchema = z.object({
   role: z.string().min(1, "Role is required"),
 });
 
-const addMemberSearchParamsSchema = z.object({
-  teamId: z.string(),
-});
-
-type AddMemberSearchParams = z.infer<typeof addMemberSearchParamsSchema>;
-
-export const Route = createFileRoute("/_authenticated/teams/add-member")({
-  validateSearch: (search: Record<string, unknown> | undefined): AddMemberSearchParams => {
-    if (!search) return { teamId: "0" };
-    const parsed = addMemberSearchParamsSchema.safeParse(search);
-    if (!parsed.success) {
-      return { teamId: "0" };
-    }
-    return parsed.data;
-  },
+export const Route = createFileRoute("/_authenticated/teams/$teamId/add-member")({
   component: AddMemberPage,
 });
 
 function AddMemberPage() {
   const navigate = useNavigate();
-  const search = useSearch({ from: "/_authenticated/teams/add-member" }) as AddMemberSearchParams;
-  const teamId = Number(search.teamId);
+  const { teamId } = useParams({ from: "/_authenticated/teams/$teamId/add-member" });
+  const teamIdNum = Number(teamId);
 
   const {
     data: roles,
@@ -60,7 +46,7 @@ function AddMemberPage() {
     onSubmit: async ({ value }) => {
       try {
         await teamClient.addTeamMember({
-          team: teamId,
+          team: teamIdNum,
           email: value.email,
           first_name: value.firstName,
           last_name: value.lastName,
@@ -68,7 +54,7 @@ function AddMemberPage() {
           role: Number(value.role),
         });
         toast.success("Team member invited!");
-        navigate({ to: "/teams/$teamId", params: { teamId: teamId.toString() } });
+        navigate({ to: "/teams/$teamId", params: { teamId: teamIdNum.toString() } });
       } catch (err) {
         toast.error((err as Error).message || "Failed to add team member");
       }

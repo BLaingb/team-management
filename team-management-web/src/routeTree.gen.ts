@@ -17,8 +17,9 @@ import { Route as AuthLoginImport } from './routes/auth/login'
 import { Route as RejectInvitationInvitationIdIndexImport } from './routes/reject-invitation/$invitationId/index'
 import { Route as AcceptInvitationInvitationIdIndexImport } from './routes/accept-invitation/$invitationId/index'
 import { Route as AuthenticatedTeamsIndexImport } from './routes/_authenticated/teams/index'
-import { Route as AuthenticatedTeamsAddMemberImport } from './routes/_authenticated/teams/add-member'
-import { Route as AuthenticatedTeamsTeamIdImport } from './routes/_authenticated/teams/$teamId'
+import { Route as AuthenticatedTeamsEditMemberImport } from './routes/_authenticated/teams/edit-member'
+import { Route as AuthenticatedTeamsTeamIdIndexImport } from './routes/_authenticated/teams/$teamId/index'
+import { Route as AuthenticatedTeamsTeamIdAddMemberImport } from './routes/_authenticated/teams/$teamId/add-member'
 
 // Create/Update Routes
 
@@ -59,18 +60,26 @@ const AuthenticatedTeamsIndexRoute = AuthenticatedTeamsIndexImport.update({
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 
-const AuthenticatedTeamsAddMemberRoute =
-  AuthenticatedTeamsAddMemberImport.update({
-    id: '/teams/add-member',
-    path: '/teams/add-member',
+const AuthenticatedTeamsEditMemberRoute =
+  AuthenticatedTeamsEditMemberImport.update({
+    id: '/teams/edit-member',
+    path: '/teams/edit-member',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
-const AuthenticatedTeamsTeamIdRoute = AuthenticatedTeamsTeamIdImport.update({
-  id: '/teams/$teamId',
-  path: '/teams/$teamId',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
+const AuthenticatedTeamsTeamIdIndexRoute =
+  AuthenticatedTeamsTeamIdIndexImport.update({
+    id: '/teams/$teamId/',
+    path: '/teams/$teamId/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedTeamsTeamIdAddMemberRoute =
+  AuthenticatedTeamsTeamIdAddMemberImport.update({
+    id: '/teams/$teamId/add-member',
+    path: '/teams/$teamId/add-member',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -97,18 +106,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginImport
       parentRoute: typeof rootRoute
     }
-    '/_authenticated/teams/$teamId': {
-      id: '/_authenticated/teams/$teamId'
-      path: '/teams/$teamId'
-      fullPath: '/teams/$teamId'
-      preLoaderRoute: typeof AuthenticatedTeamsTeamIdImport
-      parentRoute: typeof AuthenticatedImport
-    }
-    '/_authenticated/teams/add-member': {
-      id: '/_authenticated/teams/add-member'
-      path: '/teams/add-member'
-      fullPath: '/teams/add-member'
-      preLoaderRoute: typeof AuthenticatedTeamsAddMemberImport
+    '/_authenticated/teams/edit-member': {
+      id: '/_authenticated/teams/edit-member'
+      path: '/teams/edit-member'
+      fullPath: '/teams/edit-member'
+      preLoaderRoute: typeof AuthenticatedTeamsEditMemberImport
       parentRoute: typeof AuthenticatedImport
     }
     '/_authenticated/teams/': {
@@ -132,21 +134,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RejectInvitationInvitationIdIndexImport
       parentRoute: typeof rootRoute
     }
+    '/_authenticated/teams/$teamId/add-member': {
+      id: '/_authenticated/teams/$teamId/add-member'
+      path: '/teams/$teamId/add-member'
+      fullPath: '/teams/$teamId/add-member'
+      preLoaderRoute: typeof AuthenticatedTeamsTeamIdAddMemberImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/teams/$teamId/': {
+      id: '/_authenticated/teams/$teamId/'
+      path: '/teams/$teamId'
+      fullPath: '/teams/$teamId'
+      preLoaderRoute: typeof AuthenticatedTeamsTeamIdIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
   }
 }
 
 // Create and export the route tree
 
 interface AuthenticatedRouteChildren {
-  AuthenticatedTeamsTeamIdRoute: typeof AuthenticatedTeamsTeamIdRoute
-  AuthenticatedTeamsAddMemberRoute: typeof AuthenticatedTeamsAddMemberRoute
+  AuthenticatedTeamsEditMemberRoute: typeof AuthenticatedTeamsEditMemberRoute
   AuthenticatedTeamsIndexRoute: typeof AuthenticatedTeamsIndexRoute
+  AuthenticatedTeamsTeamIdAddMemberRoute: typeof AuthenticatedTeamsTeamIdAddMemberRoute
+  AuthenticatedTeamsTeamIdIndexRoute: typeof AuthenticatedTeamsTeamIdIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedTeamsTeamIdRoute: AuthenticatedTeamsTeamIdRoute,
-  AuthenticatedTeamsAddMemberRoute: AuthenticatedTeamsAddMemberRoute,
+  AuthenticatedTeamsEditMemberRoute: AuthenticatedTeamsEditMemberRoute,
   AuthenticatedTeamsIndexRoute: AuthenticatedTeamsIndexRoute,
+  AuthenticatedTeamsTeamIdAddMemberRoute:
+    AuthenticatedTeamsTeamIdAddMemberRoute,
+  AuthenticatedTeamsTeamIdIndexRoute: AuthenticatedTeamsTeamIdIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -157,22 +176,24 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof AuthenticatedRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
-  '/teams/$teamId': typeof AuthenticatedTeamsTeamIdRoute
-  '/teams/add-member': typeof AuthenticatedTeamsAddMemberRoute
+  '/teams/edit-member': typeof AuthenticatedTeamsEditMemberRoute
   '/teams': typeof AuthenticatedTeamsIndexRoute
   '/accept-invitation/$invitationId': typeof AcceptInvitationInvitationIdIndexRoute
   '/reject-invitation/$invitationId': typeof RejectInvitationInvitationIdIndexRoute
+  '/teams/$teamId/add-member': typeof AuthenticatedTeamsTeamIdAddMemberRoute
+  '/teams/$teamId': typeof AuthenticatedTeamsTeamIdIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof AuthenticatedRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
-  '/teams/$teamId': typeof AuthenticatedTeamsTeamIdRoute
-  '/teams/add-member': typeof AuthenticatedTeamsAddMemberRoute
+  '/teams/edit-member': typeof AuthenticatedTeamsEditMemberRoute
   '/teams': typeof AuthenticatedTeamsIndexRoute
   '/accept-invitation/$invitationId': typeof AcceptInvitationInvitationIdIndexRoute
   '/reject-invitation/$invitationId': typeof RejectInvitationInvitationIdIndexRoute
+  '/teams/$teamId/add-member': typeof AuthenticatedTeamsTeamIdAddMemberRoute
+  '/teams/$teamId': typeof AuthenticatedTeamsTeamIdIndexRoute
 }
 
 export interface FileRoutesById {
@@ -180,11 +201,12 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
-  '/_authenticated/teams/$teamId': typeof AuthenticatedTeamsTeamIdRoute
-  '/_authenticated/teams/add-member': typeof AuthenticatedTeamsAddMemberRoute
+  '/_authenticated/teams/edit-member': typeof AuthenticatedTeamsEditMemberRoute
   '/_authenticated/teams/': typeof AuthenticatedTeamsIndexRoute
   '/accept-invitation/$invitationId/': typeof AcceptInvitationInvitationIdIndexRoute
   '/reject-invitation/$invitationId/': typeof RejectInvitationInvitationIdIndexRoute
+  '/_authenticated/teams/$teamId/add-member': typeof AuthenticatedTeamsTeamIdAddMemberRoute
+  '/_authenticated/teams/$teamId/': typeof AuthenticatedTeamsTeamIdIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -193,31 +215,34 @@ export interface FileRouteTypes {
     | '/'
     | ''
     | '/auth/login'
-    | '/teams/$teamId'
-    | '/teams/add-member'
+    | '/teams/edit-member'
     | '/teams'
     | '/accept-invitation/$invitationId'
     | '/reject-invitation/$invitationId'
+    | '/teams/$teamId/add-member'
+    | '/teams/$teamId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | ''
     | '/auth/login'
-    | '/teams/$teamId'
-    | '/teams/add-member'
+    | '/teams/edit-member'
     | '/teams'
     | '/accept-invitation/$invitationId'
     | '/reject-invitation/$invitationId'
+    | '/teams/$teamId/add-member'
+    | '/teams/$teamId'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth/login'
-    | '/_authenticated/teams/$teamId'
-    | '/_authenticated/teams/add-member'
+    | '/_authenticated/teams/edit-member'
     | '/_authenticated/teams/'
     | '/accept-invitation/$invitationId/'
     | '/reject-invitation/$invitationId/'
+    | '/_authenticated/teams/$teamId/add-member'
+    | '/_authenticated/teams/$teamId/'
   fileRoutesById: FileRoutesById
 }
 
@@ -262,20 +287,17 @@ export const routeTree = rootRoute
     "/_authenticated": {
       "filePath": "_authenticated.tsx",
       "children": [
-        "/_authenticated/teams/$teamId",
-        "/_authenticated/teams/add-member",
-        "/_authenticated/teams/"
+        "/_authenticated/teams/edit-member",
+        "/_authenticated/teams/",
+        "/_authenticated/teams/$teamId/add-member",
+        "/_authenticated/teams/$teamId/"
       ]
     },
     "/auth/login": {
       "filePath": "auth/login.tsx"
     },
-    "/_authenticated/teams/$teamId": {
-      "filePath": "_authenticated/teams/$teamId.tsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/teams/add-member": {
-      "filePath": "_authenticated/teams/add-member.tsx",
+    "/_authenticated/teams/edit-member": {
+      "filePath": "_authenticated/teams/edit-member.tsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/teams/": {
@@ -287,6 +309,14 @@ export const routeTree = rootRoute
     },
     "/reject-invitation/$invitationId/": {
       "filePath": "reject-invitation/$invitationId/index.tsx"
+    },
+    "/_authenticated/teams/$teamId/add-member": {
+      "filePath": "_authenticated/teams/$teamId/add-member.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/teams/$teamId/": {
+      "filePath": "_authenticated/teams/$teamId/index.tsx",
+      "parent": "/_authenticated"
     }
   }
 }

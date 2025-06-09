@@ -3,7 +3,7 @@ import { TeamMembersCard } from '@/components/teams/TeamMembersCard';
 import { teamClient } from '@/lib/team-client';
 import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/_authenticated/teams/$teamId')({
+export const Route = createFileRoute('/_authenticated/teams/$teamId/')({
   loader: async ({ params }) => {
     const team = await teamClient.getTeam(Number(params.teamId));
     const invitations = await teamClient.getActiveInvitations(Number(params.teamId));

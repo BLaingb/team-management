@@ -15,7 +15,7 @@ export function TeamMembersCard({ team }: { team: Team }) {
 			<div className="flex flex-row justify-between items-center">
 				<div className="text-lg font-semibold">Team members</div>
 				<Button asChild variant="outline" size="sm">
-					<Link to="/teams/add-member" search={{ teamId: team.id.toString() }}>
+					<Link to="/teams/$teamId/add-member" params={{ teamId: team.id.toString() }}>
 						<PlusIcon className="w-4 h-4" />
 						Add member
 					</Link>
