@@ -21,10 +21,11 @@ function EmptyState() {
 					<div className="text-2xl font-bold">No teams found</div>
 					<div className="text-gray-500 flex flex-col items-center justify-center">
 						You don't have any teams yet. Create a new team to get started.
-						{/* TODO: Add a link to the create team page */}
-						<Button variant="outline" className="mt-4">
-							Create Team
-						</Button>
+						<Link to="/teams/new-team">
+							<Button variant="outline">
+								Create Team
+							</Button>
+						</Link>
 					</div>
 				</div>
 			</div>
@@ -84,6 +85,13 @@ function RouteComponent() {
 	return (
 		<div className="min-h-screen bg-gray-50 py-10">
 			<div className="max-w-xl mx-auto space-y-6">
+                <div className="flex justify-end">
+                    <Link to="/teams/new-team">
+                        <Button variant="outline">
+                            Create Team
+                        </Button>
+                    </Link>
+                </div>
 				{teams.map((team) => {
 					const { members, extraCount } = membersByTeam[team.id];
 					return (

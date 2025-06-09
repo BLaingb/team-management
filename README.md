@@ -40,11 +40,13 @@ As the app specifies that only Admin users can delete members, I figured it impl
 
 ### Only authenticated users can access the app
 As the app is dealing with sensitive details (team members' contact details), I assumed authentication was required to view any data, and access to that data was dependent on the authenticated user's permissions and team membership. This was solved with custom permissions on Team Roles, along with a custom Permission Manager that would allow permissions to be scoped to a particular team. This was also the reason I didn't use Django's auth Groups, and implemented a Team Role model.
-
+$$
 ### Admins can edit only their team member's role
 Given each team member has access to the app, and their own data, having admins updating another user's personal information didn't quite fit IMO. While this could not be the case, for the moment, it was solved by allowing the user to set up their details on signup, being pre-filled by the data on the invitation sent. In this scenario, Admins can still update other members' role for their team.
 
 ## TODO
 - Permission management on FE
+- Refresh session on FE
 - Email sending on background workers
 - Cron to invalidate/expire invitations
+- Generic API error management

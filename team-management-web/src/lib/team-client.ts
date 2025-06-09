@@ -67,6 +67,25 @@ export type TeamInvitation = z.infer<typeof teamInvitationSchema>;
 export type TeamInvitationDetail = z.infer<typeof teamInvitationDetailSchema>;
 
 export const teamClient = {
+    createTeam: async (team: Omit<Team, "id" | "members">) => {
+        try {
+            const response = await fetch(`${env.VITE_API_URL}/api/teams/`, {
+                credentials: "include",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(team),
+            });
+            if (!response.ok) {
+                throw new Error("Failed to create team");
+            }
+            return response.json();
+        } catch (error) {
+            console.error("Error creating team:", error);
+            throw error;
+        }
+    },
 	getTeams: async () => {
 		try {
 			const response = await fetch(`${env.VITE_API_URL}/api/teams/`, {
