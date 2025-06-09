@@ -1,4 +1,4 @@
-import { useAppForm } from "@/hooks/demo.form";
+import { useAppForm } from "@/hooks/useAppForm";
 import { authClient } from "@/lib/auth-client";
 import type { TeamInvitationDetail } from "@/lib/team-client";
 import { toast } from "sonner";

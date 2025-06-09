@@ -1,10 +1,11 @@
 import { useStore } from '@tanstack/react-form'
 
-import { useFieldContext, useFormContext } from '../hooks/demo.form-context'
+import { useFieldContext, useFormContext } from '../hooks/form-context'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { RadioGroup as ShadcnRadioGroup, RadioGroupItem as ShadcnRadioGroupItem } from '@/components/ui/radio-group'
 import * as ShadcnSelect from '@/components/ui/select'
 import { Slider as ShadcnSlider } from '@/components/ui/slider'
 import { Switch as ShadcnSwitch } from '@/components/ui/switch'
@@ -173,7 +174,6 @@ export function Switch({ label }: { label: string }) {
   )
 }
 
-
 export function PasswordField({
     label,
     placeholder = '********',
@@ -200,4 +200,38 @@ export function PasswordField({
       </div>
     )
   }
+
+export function RadioGroupField({
+  label,
+  options,
+}: {
+  label: string;
+  options: Array<{ label: string; value: string; description?: string }>;
+}) {
+  const field = useFieldContext<string>();
+  const errors = useStore(field.store, (state) => state.meta.errors);
+
+  return (
+    <div>
+      <div className="font-medium mb-2">{label}</div>
+      <ShadcnRadioGroup
+        value={field.state.value}
+        onValueChange={field.handleChange}
+        name={field.name}
+        className="space-y-2"
+      >
+        {options.map((option) => (
+          <div className="flex items-center space-x-2" key={option.value}>
+            <ShadcnRadioGroupItem value={option.value} id={`role-${option.value}`} />
+            <Label htmlFor={`role-${option.value}`} className="flex-1">
+              <span className="font-normal">{option.label}</span>
+              {option.description && <span className="text-gray-400"> - {option.description}</span>}
+            </Label>
+          </div>
+        ))}
+      </ShadcnRadioGroup>
+      {field.state.meta.isTouched && <ErrorMessages errors={errors} />}
+    </div>
+  );
+}
   

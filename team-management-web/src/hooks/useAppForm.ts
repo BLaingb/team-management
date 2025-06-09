@@ -7,7 +7,7 @@ import {
   TextArea,
   TextField,
 } from '../components/FormComponents'
-import { fieldContext, formContext } from './demo.form-context'
+import { fieldContext, formContext } from './form-context'
 
 export const { useAppForm } = createFormHook({
   fieldComponents: {

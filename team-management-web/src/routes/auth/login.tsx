@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate, useSearch } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { z } from 'zod'
-import { useAppForm } from '../../hooks/demo.form'
+import { useAppForm } from '../../hooks/useAppForm'
 import { authClient } from '../../lib/auth-client'
 
 const loginSearchParamsSchema = z.object({
