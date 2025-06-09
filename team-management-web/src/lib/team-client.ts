@@ -3,8 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { z } from "zod";
 import { apiClient } from "./api-client";
 
-const TEAMS_QUERY_KEY = ["teams"];
-
 const teamRoleSchema = z.object({
 	id: z.number(),
 	name: z.string(),
@@ -268,20 +266,6 @@ export const teamClient = {
             throw error;
         }
     },
-};
-
-export const useGetTeams = () => {
-	return useQuery({
-		queryKey: TEAMS_QUERY_KEY,
-		queryFn: teamClient.getTeams,
-	});
-};
-
-export const useGetTeam = (teamId: number) => {
-	return useQuery({
-		queryKey: ["team", teamId],
-		queryFn: () => teamClient.getTeam(teamId),
-	});
 };
 
 export const useGetTeamPermissions = (teamId: number) => {
