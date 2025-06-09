@@ -17,9 +17,9 @@ import { Route as AuthLoginImport } from './routes/auth/login'
 import { Route as RejectInvitationInvitationIdIndexImport } from './routes/reject-invitation/$invitationId/index'
 import { Route as AcceptInvitationInvitationIdIndexImport } from './routes/accept-invitation/$invitationId/index'
 import { Route as AuthenticatedTeamsIndexImport } from './routes/_authenticated/teams/index'
-import { Route as AuthenticatedTeamsEditMemberImport } from './routes/_authenticated/teams/edit-member'
 import { Route as AuthenticatedTeamsTeamIdIndexImport } from './routes/_authenticated/teams/$teamId/index'
 import { Route as AuthenticatedTeamsTeamIdAddMemberImport } from './routes/_authenticated/teams/$teamId/add-member'
+import { Route as AuthenticatedTeamsTeamIdEditMemberMemberIdIndexImport } from './routes/_authenticated/teams/$teamId/edit-member/$memberId/index'
 
 // Create/Update Routes
 
@@ -60,13 +60,6 @@ const AuthenticatedTeamsIndexRoute = AuthenticatedTeamsIndexImport.update({
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 
-const AuthenticatedTeamsEditMemberRoute =
-  AuthenticatedTeamsEditMemberImport.update({
-    id: '/teams/edit-member',
-    path: '/teams/edit-member',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-
 const AuthenticatedTeamsTeamIdIndexRoute =
   AuthenticatedTeamsTeamIdIndexImport.update({
     id: '/teams/$teamId/',
@@ -78,6 +71,13 @@ const AuthenticatedTeamsTeamIdAddMemberRoute =
   AuthenticatedTeamsTeamIdAddMemberImport.update({
     id: '/teams/$teamId/add-member',
     path: '/teams/$teamId/add-member',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedTeamsTeamIdEditMemberMemberIdIndexRoute =
+  AuthenticatedTeamsTeamIdEditMemberMemberIdIndexImport.update({
+    id: '/teams/$teamId/edit-member/$memberId/',
+    path: '/teams/$teamId/edit-member/$memberId/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
@@ -105,13 +105,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/login'
       preLoaderRoute: typeof AuthLoginImport
       parentRoute: typeof rootRoute
-    }
-    '/_authenticated/teams/edit-member': {
-      id: '/_authenticated/teams/edit-member'
-      path: '/teams/edit-member'
-      fullPath: '/teams/edit-member'
-      preLoaderRoute: typeof AuthenticatedTeamsEditMemberImport
-      parentRoute: typeof AuthenticatedImport
     }
     '/_authenticated/teams/': {
       id: '/_authenticated/teams/'
@@ -148,24 +141,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTeamsTeamIdIndexImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/teams/$teamId/edit-member/$memberId/': {
+      id: '/_authenticated/teams/$teamId/edit-member/$memberId/'
+      path: '/teams/$teamId/edit-member/$memberId'
+      fullPath: '/teams/$teamId/edit-member/$memberId'
+      preLoaderRoute: typeof AuthenticatedTeamsTeamIdEditMemberMemberIdIndexImport
+      parentRoute: typeof AuthenticatedImport
+    }
   }
 }
 
 // Create and export the route tree
 
 interface AuthenticatedRouteChildren {
-  AuthenticatedTeamsEditMemberRoute: typeof AuthenticatedTeamsEditMemberRoute
   AuthenticatedTeamsIndexRoute: typeof AuthenticatedTeamsIndexRoute
   AuthenticatedTeamsTeamIdAddMemberRoute: typeof AuthenticatedTeamsTeamIdAddMemberRoute
   AuthenticatedTeamsTeamIdIndexRoute: typeof AuthenticatedTeamsTeamIdIndexRoute
+  AuthenticatedTeamsTeamIdEditMemberMemberIdIndexRoute: typeof AuthenticatedTeamsTeamIdEditMemberMemberIdIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedTeamsEditMemberRoute: AuthenticatedTeamsEditMemberRoute,
   AuthenticatedTeamsIndexRoute: AuthenticatedTeamsIndexRoute,
   AuthenticatedTeamsTeamIdAddMemberRoute:
     AuthenticatedTeamsTeamIdAddMemberRoute,
   AuthenticatedTeamsTeamIdIndexRoute: AuthenticatedTeamsTeamIdIndexRoute,
+  AuthenticatedTeamsTeamIdEditMemberMemberIdIndexRoute:
+    AuthenticatedTeamsTeamIdEditMemberMemberIdIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -176,24 +177,24 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof AuthenticatedRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
-  '/teams/edit-member': typeof AuthenticatedTeamsEditMemberRoute
   '/teams': typeof AuthenticatedTeamsIndexRoute
   '/accept-invitation/$invitationId': typeof AcceptInvitationInvitationIdIndexRoute
   '/reject-invitation/$invitationId': typeof RejectInvitationInvitationIdIndexRoute
   '/teams/$teamId/add-member': typeof AuthenticatedTeamsTeamIdAddMemberRoute
   '/teams/$teamId': typeof AuthenticatedTeamsTeamIdIndexRoute
+  '/teams/$teamId/edit-member/$memberId': typeof AuthenticatedTeamsTeamIdEditMemberMemberIdIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof AuthenticatedRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
-  '/teams/edit-member': typeof AuthenticatedTeamsEditMemberRoute
   '/teams': typeof AuthenticatedTeamsIndexRoute
   '/accept-invitation/$invitationId': typeof AcceptInvitationInvitationIdIndexRoute
   '/reject-invitation/$invitationId': typeof RejectInvitationInvitationIdIndexRoute
   '/teams/$teamId/add-member': typeof AuthenticatedTeamsTeamIdAddMemberRoute
   '/teams/$teamId': typeof AuthenticatedTeamsTeamIdIndexRoute
+  '/teams/$teamId/edit-member/$memberId': typeof AuthenticatedTeamsTeamIdEditMemberMemberIdIndexRoute
 }
 
 export interface FileRoutesById {
@@ -201,12 +202,12 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
-  '/_authenticated/teams/edit-member': typeof AuthenticatedTeamsEditMemberRoute
   '/_authenticated/teams/': typeof AuthenticatedTeamsIndexRoute
   '/accept-invitation/$invitationId/': typeof AcceptInvitationInvitationIdIndexRoute
   '/reject-invitation/$invitationId/': typeof RejectInvitationInvitationIdIndexRoute
   '/_authenticated/teams/$teamId/add-member': typeof AuthenticatedTeamsTeamIdAddMemberRoute
   '/_authenticated/teams/$teamId/': typeof AuthenticatedTeamsTeamIdIndexRoute
+  '/_authenticated/teams/$teamId/edit-member/$memberId/': typeof AuthenticatedTeamsTeamIdEditMemberMemberIdIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -215,34 +216,34 @@ export interface FileRouteTypes {
     | '/'
     | ''
     | '/auth/login'
-    | '/teams/edit-member'
     | '/teams'
     | '/accept-invitation/$invitationId'
     | '/reject-invitation/$invitationId'
     | '/teams/$teamId/add-member'
     | '/teams/$teamId'
+    | '/teams/$teamId/edit-member/$memberId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | ''
     | '/auth/login'
-    | '/teams/edit-member'
     | '/teams'
     | '/accept-invitation/$invitationId'
     | '/reject-invitation/$invitationId'
     | '/teams/$teamId/add-member'
     | '/teams/$teamId'
+    | '/teams/$teamId/edit-member/$memberId'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth/login'
-    | '/_authenticated/teams/edit-member'
     | '/_authenticated/teams/'
     | '/accept-invitation/$invitationId/'
     | '/reject-invitation/$invitationId/'
     | '/_authenticated/teams/$teamId/add-member'
     | '/_authenticated/teams/$teamId/'
+    | '/_authenticated/teams/$teamId/edit-member/$memberId/'
   fileRoutesById: FileRoutesById
 }
 
@@ -287,18 +288,14 @@ export const routeTree = rootRoute
     "/_authenticated": {
       "filePath": "_authenticated.tsx",
       "children": [
-        "/_authenticated/teams/edit-member",
         "/_authenticated/teams/",
         "/_authenticated/teams/$teamId/add-member",
-        "/_authenticated/teams/$teamId/"
+        "/_authenticated/teams/$teamId/",
+        "/_authenticated/teams/$teamId/edit-member/$memberId/"
       ]
     },
     "/auth/login": {
       "filePath": "auth/login.tsx"
-    },
-    "/_authenticated/teams/edit-member": {
-      "filePath": "_authenticated/teams/edit-member.tsx",
-      "parent": "/_authenticated"
     },
     "/_authenticated/teams/": {
       "filePath": "_authenticated/teams/index.tsx",
@@ -316,6 +313,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/teams/$teamId/": {
       "filePath": "_authenticated/teams/$teamId/index.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/teams/$teamId/edit-member/$memberId/": {
+      "filePath": "_authenticated/teams/$teamId/edit-member/$memberId/index.tsx",
       "parent": "/_authenticated"
     }
   }

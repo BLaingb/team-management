@@ -28,11 +28,10 @@ export function TeamMembersCard({ team }: { team: Team }) {
 			</div>
 			<div className="space-y-4">
 				{team.members.map((member, idx) => (
-                    // TODO: Update link to team member page
 					<Link
 						key={member.user.id}
-						to="/teams/$teamId"
-						params={{ teamId: team.id.toString() }}
+						to="/teams/$teamId/edit-member/$memberId"
+						params={{ teamId: team.id.toString(), memberId: member.id.toString() }}
 						className="hover:text-gray-600 hover:cursor-pointer"
 					>
 						<div>

@@ -11,6 +11,7 @@ const teamRoleSchema = z.object({
 });
 
 const teamMemberSchema = z.object({
+    id: z.number(),
 	user: z.object({
 		id: z.number(),
 		full_name: z.string(),
@@ -198,6 +199,56 @@ export const teamClient = {
             throw error;
         }
     },
+    getTeamMember: async (teamId: number, memberId: number) => {
+        try {
+            const response = await fetch(`${env.VITE_API_URL}/api/teams/${teamId}/members/${memberId}/`, {
+                credentials: "include",
+            });
+            if (!response.ok) {
+                throw new Error("Failed to fetch team member");
+            }
+            const data = await response.json();
+            return teamMemberSchema.parse(data);
+        } catch (error) {
+            console.error("Error fetching team member:", error);
+            throw error;
+        }
+    },
+    updateTeamMemberRole: async (teamId: number, memberId: number, roleId: number) => {
+        try {
+            const response = await fetch(`${env.VITE_API_URL}/api/teams/${teamId}/members/${memberId}/`, {
+                credentials: "include",
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ role: roleId }),
+            });
+            if (!response.ok) {
+                throw new Error("Failed to update team member");
+            }
+            return response.json();
+        } catch (error) {
+            console.error("Error updating team member:", error);    
+            throw error;
+        }
+    },
+    deleteTeamMember: async (teamId: number, memberId: number) => {
+        try {
+            const response = await fetch(`${env.VITE_API_URL}/api/teams/${teamId}/members/${memberId}/`, {
+                credentials: "include",
+                method: "DELETE",
+            });
+            if (!response.ok) {
+                throw new Error("Failed to delete team member");
+            }
+            return response.json();
+        } catch (error) {
+            console.error("Error deleting team member:", error);
+            throw error;
+        }
+    },
+                credentials: "include",
 };
 
 export const useGetTeams = () => {
