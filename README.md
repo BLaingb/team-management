@@ -1,4 +1,6 @@
 # Instawork's Team Management
+This project is done as part of Instawork's recruitment process. While the requirements specify an app with 3 pages (view team members, add team member, edit team member), I took some liberty around the requirements to get a more realistic use case (eg. When adding a team member, they'd need a way to sign up and access the app). The assumptions made are [listed below](#assumptions-made), along with a short description on why they were made and how they were accounted for.
+
 
 ## Stack
 
@@ -27,13 +29,19 @@ pnpm start
 ```
 
 ## Assumptions Made
-- Users can be members of more than one team
-- New team members should be able to access the app
-- Only authenticated users can access the app
-- Admins can edit their team member's information
+### Users can be members of more than one team
+This assumption was made mainly to make the use case more realistic, as often team hierarchies and dynamics are more complex than only one team within a company, and for a given employee.
+
+### New team members should be able to access the app
+As the app specifies that only Admin users can delete members, I figured it implied Regular users (as well as other admins) should have access once added to a team. To solve this, I thought of a Team Invitation mechanism, were "Added" team members were instead invited, and had to sign up to become part of the team. This added quite a bit more work to the app, but again, results in a more realistic scenario.
+
+### Only authenticated users can access the app
+As the app is dealing with sensitive details (team members' contact details), I assumed authentication was required to view any data, and access to that data was dependent on the authenticated user's permissions and team membership. This was solved with custom permissions on Team Roles, along with a custom Permission Manager that would allow permissions to be scoped to a particular team. This was also the reason I didn't use Django's auth Groups, and implemented a Team Role model.
+
+### Admins can edit only their team member's role
+Given each team member has access to the app, and their own data, having admins updating another user's personal information didn't quite fit IMO. While this could not be the case, for the moment, it was solved by allowing the user to set up their details on signup, being pre-filled by the data on the invitation sent. In this scenario, Admins can still update other members' role for their team.
 
 ## TODO
-- Accept/Reject invites
-- Edit team members
 - When creating a team, automatically set the current user as a member with Admin role
 - Email sending on background workers
+- Cron to invalidate/expire invitations
