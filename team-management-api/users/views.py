@@ -80,7 +80,6 @@ class HttpOnlyCookieTokenVerifyView(TokenVerifyView):
     serializer_class = CustomTokenVerifySerializer
 
     def post(self, request, *args, **kwargs):
-        # Get access token from cookie
         access_token = request.COOKIES.get(settings.SIMPLE_JWT["AUTH_COOKIE_ACCESS"])
         if not access_token:
             return Response(
@@ -97,7 +96,6 @@ class HttpOnlyCookieTokenVerifyView(TokenVerifyView):
                 {"detail": "Invalid token"}, status=status.HTTP_401_UNAUTHORIZED
             )
 
-        # Decode token and get user
         try:
             token = AccessToken(access_token)
             user_id = token["user_id"]
@@ -123,7 +121,6 @@ class HttpOnlyCookieTokenRefreshView(TokenRefreshView):
     serializer_class = CustomTokenRefreshSerializer
 
     def post(self, request, *args, **kwargs):
-        # Get refresh token from cookie
         refresh_token = request.COOKIES.get(settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"])
         if not refresh_token:
             return Response(
