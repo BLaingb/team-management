@@ -28,7 +28,7 @@ class TeamMemberSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TeamMember
-        fields = ["user", "role"]
+        fields = ["id", "user", "role"]
 
 
 class TeamSerializer(serializers.ModelSerializer):
@@ -90,3 +90,9 @@ class TeamInvitationDetailSerializer(TeamInvitationSerializer):
 
     def get_user_exists(self, obj):
         return User.objects.filter(email=obj.email).exists()
+
+
+class TeamMemberUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TeamMember
+        fields = ["role"]

@@ -189,6 +189,7 @@ class SignupView(APIView):
     """
     View to register a new user.
     """
+
     def post(self, request, *args, **kwargs):
         serializer = UserSignupSerializer(data=request.data)
         if serializer.is_valid():

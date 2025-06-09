@@ -44,11 +44,20 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserSignupSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, min_length=8)
-    password2 = serializers.CharField(write_only=True, required=True, label="Confirm password")
+    password2 = serializers.CharField(
+        write_only=True, required=True, label="Confirm password"
+    )
 
     class Meta:
         model = CustomUser
-        fields = ("email", "first_name", "last_name", "phone_number", "password", "password2")
+        fields = (
+            "email",
+            "first_name",
+            "last_name",
+            "phone_number",
+            "password",
+            "password2",
+        )
 
     def validate(self, attrs):
         if attrs["password"] != attrs["password2"]:
