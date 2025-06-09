@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthLoginImport } from './routes/auth/login'
+import { Route as RejectInvitationInvitationIdIndexImport } from './routes/reject-invitation/$invitationId/index'
 import { Route as AcceptInvitationInvitationIdIndexImport } from './routes/accept-invitation/$invitationId/index'
 import { Route as AuthenticatedTeamsIndexImport } from './routes/_authenticated/teams/index'
 import { Route as AuthenticatedTeamsAddMemberImport } from './routes/_authenticated/teams/add-member'
@@ -37,6 +38,13 @@ const AuthLoginRoute = AuthLoginImport.update({
   path: '/auth/login',
   getParentRoute: () => rootRoute,
 } as any)
+
+const RejectInvitationInvitationIdIndexRoute =
+  RejectInvitationInvitationIdIndexImport.update({
+    id: '/reject-invitation/$invitationId/',
+    path: '/reject-invitation/$invitationId/',
+    getParentRoute: () => rootRoute,
+  } as any)
 
 const AcceptInvitationInvitationIdIndexRoute =
   AcceptInvitationInvitationIdIndexImport.update({
@@ -117,6 +125,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AcceptInvitationInvitationIdIndexImport
       parentRoute: typeof rootRoute
     }
+    '/reject-invitation/$invitationId/': {
+      id: '/reject-invitation/$invitationId/'
+      path: '/reject-invitation/$invitationId'
+      fullPath: '/reject-invitation/$invitationId'
+      preLoaderRoute: typeof RejectInvitationInvitationIdIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -146,6 +161,7 @@ export interface FileRoutesByFullPath {
   '/teams/add-member': typeof AuthenticatedTeamsAddMemberRoute
   '/teams': typeof AuthenticatedTeamsIndexRoute
   '/accept-invitation/$invitationId': typeof AcceptInvitationInvitationIdIndexRoute
+  '/reject-invitation/$invitationId': typeof RejectInvitationInvitationIdIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -156,6 +172,7 @@ export interface FileRoutesByTo {
   '/teams/add-member': typeof AuthenticatedTeamsAddMemberRoute
   '/teams': typeof AuthenticatedTeamsIndexRoute
   '/accept-invitation/$invitationId': typeof AcceptInvitationInvitationIdIndexRoute
+  '/reject-invitation/$invitationId': typeof RejectInvitationInvitationIdIndexRoute
 }
 
 export interface FileRoutesById {
@@ -167,6 +184,7 @@ export interface FileRoutesById {
   '/_authenticated/teams/add-member': typeof AuthenticatedTeamsAddMemberRoute
   '/_authenticated/teams/': typeof AuthenticatedTeamsIndexRoute
   '/accept-invitation/$invitationId/': typeof AcceptInvitationInvitationIdIndexRoute
+  '/reject-invitation/$invitationId/': typeof RejectInvitationInvitationIdIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -179,6 +197,7 @@ export interface FileRouteTypes {
     | '/teams/add-member'
     | '/teams'
     | '/accept-invitation/$invitationId'
+    | '/reject-invitation/$invitationId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -188,6 +207,7 @@ export interface FileRouteTypes {
     | '/teams/add-member'
     | '/teams'
     | '/accept-invitation/$invitationId'
+    | '/reject-invitation/$invitationId'
   id:
     | '__root__'
     | '/'
@@ -197,6 +217,7 @@ export interface FileRouteTypes {
     | '/_authenticated/teams/add-member'
     | '/_authenticated/teams/'
     | '/accept-invitation/$invitationId/'
+    | '/reject-invitation/$invitationId/'
   fileRoutesById: FileRoutesById
 }
 
@@ -205,6 +226,7 @@ export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthLoginRoute: typeof AuthLoginRoute
   AcceptInvitationInvitationIdIndexRoute: typeof AcceptInvitationInvitationIdIndexRoute
+  RejectInvitationInvitationIdIndexRoute: typeof RejectInvitationInvitationIdIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -213,6 +235,8 @@ const rootRouteChildren: RootRouteChildren = {
   AuthLoginRoute: AuthLoginRoute,
   AcceptInvitationInvitationIdIndexRoute:
     AcceptInvitationInvitationIdIndexRoute,
+  RejectInvitationInvitationIdIndexRoute:
+    RejectInvitationInvitationIdIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -228,7 +252,8 @@ export const routeTree = rootRoute
         "/",
         "/_authenticated",
         "/auth/login",
-        "/accept-invitation/$invitationId/"
+        "/accept-invitation/$invitationId/",
+        "/reject-invitation/$invitationId/"
       ]
     },
     "/": {
@@ -259,6 +284,9 @@ export const routeTree = rootRoute
     },
     "/accept-invitation/$invitationId/": {
       "filePath": "accept-invitation/$invitationId/index.tsx"
+    },
+    "/reject-invitation/$invitationId/": {
+      "filePath": "reject-invitation/$invitationId/index.tsx"
     }
   }
 }

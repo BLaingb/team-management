@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
+import { teamClient } from "@/lib/team-client";
 import { useQuery } from "@tanstack/react-query";
 import {
     createFileRoute,
@@ -12,7 +13,7 @@ import { useAcceptRejectInvitation } from "../../../hooks/useAcceptRejectInvitat
 
 export const Route = createFileRoute("/accept-invitation/$invitationId/")({
 	loader: async ({ params }) => {
-		const invitation = await import("@/lib/team-client").then(m => m.teamClient.getTeamInvitation(Number(params.invitationId)));
+		const invitation = await teamClient.getTeamInvitation(Number(params.invitationId));
 		return { invitation };
 	},
 	component: RouteComponent,
@@ -33,7 +34,7 @@ function RouteComponent() {
 			<div className="flex justify-center items-center min-h-screen">Loading...</div>
 		);
 	}
-	if (!invitation) {
+	if (!invitation || invitation.status !== "pending") {
 		return (
 			<div className="flex justify-center items-center min-h-screen text-red-500">
 				Invitation not found.
