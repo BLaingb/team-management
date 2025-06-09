@@ -50,10 +50,20 @@ const teamInvitationSchema = z.object({
 	updated_at: z.string(),
 });
 
+const teamInvitationDetailSchema = teamInvitationSchema.extend({
+	team: z.object({
+        id: z.number(),
+        name: z.string(),
+        description: z.string(),
+    }),
+    user_exists: z.boolean(),
+});
+
 export type Team = z.infer<typeof teamSchema>;
 export type TeamMember = z.infer<typeof teamMemberSchema>;
 export type TeamMemberInvitation = z.infer<typeof teamMemberInvitationSchema>;
 export type TeamInvitation = z.infer<typeof teamInvitationSchema>;
+export type TeamInvitationDetail = z.infer<typeof teamInvitationDetailSchema>;
 
 export const teamClient = {
 	getTeams: async () => {
@@ -143,6 +153,51 @@ export const teamClient = {
 			throw error;
 		}
 	},
+    getTeamInvitation: async (invitationId: number) => {
+        try {
+            const response = await fetch(`${env.VITE_API_URL}/api/team-invitations/${invitationId}`, {
+                credentials: "include",
+            });
+            if (!response.ok) {
+                throw new Error("Failed to fetch team invitation");
+            }
+            const data = await response.json();
+            return teamInvitationDetailSchema.parse(data);
+        } catch (error) {
+            console.error("Error fetching team invitation:", error);
+            throw error;
+        }
+    },
+    acceptTeamInvitation: async (invitationId: number) => {
+        try {
+            const response = await fetch(`${env.VITE_API_URL}/api/team-invitations/${invitationId}/accept/`, {
+                credentials: "include",
+                method: "POST",
+            });
+            if (!response.ok) {
+                throw new Error("Failed to accept team invitation");
+            }
+            return response.json();
+        } catch (error) {
+            console.error("Error accepting team invitation:", error);
+            throw error;
+        }
+    },
+    rejectTeamInvitation: async (invitationId: number) => {
+        try {
+            const response = await fetch(`${env.VITE_API_URL}/api/team-invitations/${invitationId}/reject/`, {
+                credentials: "include",
+                method: "POST",
+            });
+            if (!response.ok) {
+                throw new Error("Failed to reject team invitation");
+            }
+            return response.json();
+        } catch (error) {
+            console.error("Error rejecting team invitation:", error);
+            throw error;
+        }
+    },
 };
 
 export const useGetTeams = () => {

@@ -5,7 +5,7 @@ import type { Team } from "@/lib/team-client";
 import { getInitials } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { ChevronRight, PlusIcon } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 
 
 

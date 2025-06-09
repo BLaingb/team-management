@@ -1,5 +1,5 @@
-import { TeamInvitationsCard } from '@/components/TeamInvitationsCard';
-import { TeamMembersCard } from '@/components/TeamMembersCard';
+import { TeamInvitationsCard } from '@/components/teams/TeamInvitationsCard';
+import { TeamMembersCard } from '@/components/teams/TeamMembersCard';
 import { teamClient } from '@/lib/team-client';
 import { createFileRoute } from '@tanstack/react-router';
 

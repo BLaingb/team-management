@@ -1,6 +1,6 @@
 from rest_framework import viewsets, generics
-from .models import Team, TeamInvitation, TeamRole
-from .serializers import TeamSerializer, TeamInvitationSerializer, TeamRoleSerializer
+from .models import Team, TeamInvitation, TeamRole, TeamMember
+from .serializers import TeamSerializer, TeamInvitationSerializer, TeamRoleSerializer, TeamInvitationDetailSerializer
 from utils.emailsender import email_sender
 from datetime import timedelta
 from django.utils import timezone
@@ -8,8 +8,9 @@ from django.template.loader import render_to_string
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.exceptions import PermissionDenied
-from .permissions import user_has_team_permission, HasTeamPermission
+from .permissions import HasTeamPermission
+from django.shortcuts import get_object_or_404
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 
 class TeamViewSet(viewsets.ModelViewSet):
@@ -76,3 +77,64 @@ class TeamActiveInvitationsView(APIView):
         invitations = TeamInvitation.objects.active_invitations_for_team(team)
         serializer = TeamInvitationSerializer(invitations, many=True)
         return Response(serializer.data)
+
+
+class TeamInvitationDetailView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, invitation_id):
+        invitation = get_object_or_404(TeamInvitation, id=invitation_id)
+        serializer = TeamInvitationDetailSerializer(invitation)
+        return Response(serializer.data)
+
+
+class MyActiveInvitationsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user_email = request.user.email
+        now = timezone.now()
+        invitations = TeamInvitation.objects.filter(
+            email=user_email,
+            status="pending",
+            expires_at__gt=now
+        )
+        serializer = TeamInvitationSerializer(invitations, many=True)
+        return Response(serializer.data)
+
+
+class AcceptInvitationView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, invitation_id):
+        invitation = get_object_or_404(TeamInvitation, id=invitation_id)
+        if invitation.status != "pending":
+            return Response({"detail": "Invitation is not pending."}, status=status.HTTP_400_BAD_REQUEST)
+        if invitation.expires_at <= timezone.now():
+            return Response({"detail": "Invitation has expired."}, status=status.HTTP_400_BAD_REQUEST)
+        if request.user.email.lower() != invitation.email.lower():
+            return Response({"detail": "You are not authorized to accept this invitation."}, status=status.HTTP_403_FORBIDDEN)
+        if not TeamMember.objects.is_user_member(invitation.team, request.user.email):
+            TeamMember.objects.create(
+                team=invitation.team,
+                user=request.user,
+                role=invitation.role
+            )
+        invitation.status = "accepted"
+        invitation.save()
+        return Response({"detail": "Invitation accepted and you have been added to the team."}, status=status.HTTP_200_OK)
+
+
+class RejectInvitationView(APIView):
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
+    def post(self, request, invitation_id):
+        invitation = get_object_or_404(TeamInvitation, id=invitation_id)
+        if invitation.status != "pending":
+            return Response({"detail": "Invitation is not pending."}, status=status.HTTP_400_BAD_REQUEST)
+        if invitation.expires_at <= timezone.now():
+            return Response({"detail": "Invitation has expired."}, status=status.HTTP_400_BAD_REQUEST)
+        invitation.status = "rejected"
+        invitation.save()
+        return Response({"detail": "Invitation rejected."}, status=status.HTTP_200_OK)

@@ -1,6 +1,6 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
-from .views import TeamViewSet, TeamInvitationCreateView, TeamRoleViewSet, TeamActiveInvitationsView
+from .views import TeamViewSet, TeamInvitationCreateView, TeamRoleViewSet, TeamActiveInvitationsView, TeamInvitationDetailView, MyActiveInvitationsView, AcceptInvitationView, RejectInvitationView
 
 router = DefaultRouter()
 router.register(r"teams", TeamViewSet, basename="team")
@@ -16,5 +16,25 @@ urlpatterns = router.urls + [
         "teams/<int:team_id>/active-invitations/",
         TeamActiveInvitationsView.as_view(),
         name="team-active-invitations",
+    ),
+    path(
+        "team-invitations/<int:invitation_id>/",
+        TeamInvitationDetailView.as_view(),
+        name="team-invitation-detail",
+    ),
+    path(
+        "team-invitations/<int:invitation_id>/accept/",
+        AcceptInvitationView.as_view(),
+        name="team-invitation-accept",
+    ),
+    path(
+        "team-invitations/<int:invitation_id>/reject/",
+        RejectInvitationView.as_view(),
+        name="team-invitation-reject",
+    ),
+    path(
+        "active-invitations/",
+        MyActiveInvitationsView.as_view(),
+        name="my-active-invitations",
     ),
 ]

@@ -5,6 +5,7 @@ from .views import (
     HttpOnlyCookieTokenRefreshView,
     HttpOnlyCookieLogoutView,
     HttpOnlyCookieTokenVerifyView,
+    SignupView,
 )
 
 
@@ -21,4 +22,5 @@ urlpatterns += [
     ),
     path("token/verify/", HttpOnlyCookieTokenVerifyView.as_view(), name="token_verify"),
     path("logout/", HttpOnlyCookieLogoutView.as_view(), name="logout"),
+    path("signup/", SignupView.as_view(), name="signup"),
 ]

@@ -13,11 +13,9 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
-import { Route as DemoTanstackQueryImport } from './routes/demo.tanstack-query'
 import { Route as AuthLoginImport } from './routes/auth/login'
+import { Route as AcceptInvitationInvitationIdIndexImport } from './routes/accept-invitation/$invitationId/index'
 import { Route as AuthenticatedTeamsIndexImport } from './routes/_authenticated/teams/index'
-import { Route as DemoFormSimpleImport } from './routes/demo.form.simple'
-import { Route as DemoFormAddressImport } from './routes/demo.form.address'
 import { Route as AuthenticatedTeamsAddMemberImport } from './routes/_authenticated/teams/add-member'
 import { Route as AuthenticatedTeamsTeamIdImport } from './routes/_authenticated/teams/$teamId'
 
@@ -34,34 +32,23 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const DemoTanstackQueryRoute = DemoTanstackQueryImport.update({
-  id: '/demo/tanstack-query',
-  path: '/demo/tanstack-query',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const AuthLoginRoute = AuthLoginImport.update({
   id: '/auth/login',
   path: '/auth/login',
   getParentRoute: () => rootRoute,
 } as any)
 
+const AcceptInvitationInvitationIdIndexRoute =
+  AcceptInvitationInvitationIdIndexImport.update({
+    id: '/accept-invitation/$invitationId/',
+    path: '/accept-invitation/$invitationId/',
+    getParentRoute: () => rootRoute,
+  } as any)
+
 const AuthenticatedTeamsIndexRoute = AuthenticatedTeamsIndexImport.update({
   id: '/teams/',
   path: '/teams/',
   getParentRoute: () => AuthenticatedRoute,
-} as any)
-
-const DemoFormSimpleRoute = DemoFormSimpleImport.update({
-  id: '/demo/form/simple',
-  path: '/demo/form/simple',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const DemoFormAddressRoute = DemoFormAddressImport.update({
-  id: '/demo/form/address',
-  path: '/demo/form/address',
-  getParentRoute: () => rootRoute,
 } as any)
 
 const AuthenticatedTeamsAddMemberRoute =
@@ -102,13 +89,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginImport
       parentRoute: typeof rootRoute
     }
-    '/demo/tanstack-query': {
-      id: '/demo/tanstack-query'
-      path: '/demo/tanstack-query'
-      fullPath: '/demo/tanstack-query'
-      preLoaderRoute: typeof DemoTanstackQueryImport
-      parentRoute: typeof rootRoute
-    }
     '/_authenticated/teams/$teamId': {
       id: '/_authenticated/teams/$teamId'
       path: '/teams/$teamId'
@@ -123,26 +103,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTeamsAddMemberImport
       parentRoute: typeof AuthenticatedImport
     }
-    '/demo/form/address': {
-      id: '/demo/form/address'
-      path: '/demo/form/address'
-      fullPath: '/demo/form/address'
-      preLoaderRoute: typeof DemoFormAddressImport
-      parentRoute: typeof rootRoute
-    }
-    '/demo/form/simple': {
-      id: '/demo/form/simple'
-      path: '/demo/form/simple'
-      fullPath: '/demo/form/simple'
-      preLoaderRoute: typeof DemoFormSimpleImport
-      parentRoute: typeof rootRoute
-    }
     '/_authenticated/teams/': {
       id: '/_authenticated/teams/'
       path: '/teams'
       fullPath: '/teams'
       preLoaderRoute: typeof AuthenticatedTeamsIndexImport
       parentRoute: typeof AuthenticatedImport
+    }
+    '/accept-invitation/$invitationId/': {
+      id: '/accept-invitation/$invitationId/'
+      path: '/accept-invitation/$invitationId'
+      fullPath: '/accept-invitation/$invitationId'
+      preLoaderRoute: typeof AcceptInvitationInvitationIdIndexImport
+      parentRoute: typeof rootRoute
     }
   }
 }
@@ -169,24 +142,20 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof AuthenticatedRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/teams/$teamId': typeof AuthenticatedTeamsTeamIdRoute
   '/teams/add-member': typeof AuthenticatedTeamsAddMemberRoute
-  '/demo/form/address': typeof DemoFormAddressRoute
-  '/demo/form/simple': typeof DemoFormSimpleRoute
   '/teams': typeof AuthenticatedTeamsIndexRoute
+  '/accept-invitation/$invitationId': typeof AcceptInvitationInvitationIdIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof AuthenticatedRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/teams/$teamId': typeof AuthenticatedTeamsTeamIdRoute
   '/teams/add-member': typeof AuthenticatedTeamsAddMemberRoute
-  '/demo/form/address': typeof DemoFormAddressRoute
-  '/demo/form/simple': typeof DemoFormSimpleRoute
   '/teams': typeof AuthenticatedTeamsIndexRoute
+  '/accept-invitation/$invitationId': typeof AcceptInvitationInvitationIdIndexRoute
 }
 
 export interface FileRoutesById {
@@ -194,12 +163,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/_authenticated/teams/$teamId': typeof AuthenticatedTeamsTeamIdRoute
   '/_authenticated/teams/add-member': typeof AuthenticatedTeamsAddMemberRoute
-  '/demo/form/address': typeof DemoFormAddressRoute
-  '/demo/form/simple': typeof DemoFormSimpleRoute
   '/_authenticated/teams/': typeof AuthenticatedTeamsIndexRoute
+  '/accept-invitation/$invitationId/': typeof AcceptInvitationInvitationIdIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -208,34 +175,28 @@ export interface FileRouteTypes {
     | '/'
     | ''
     | '/auth/login'
-    | '/demo/tanstack-query'
     | '/teams/$teamId'
     | '/teams/add-member'
-    | '/demo/form/address'
-    | '/demo/form/simple'
     | '/teams'
+    | '/accept-invitation/$invitationId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | ''
     | '/auth/login'
-    | '/demo/tanstack-query'
     | '/teams/$teamId'
     | '/teams/add-member'
-    | '/demo/form/address'
-    | '/demo/form/simple'
     | '/teams'
+    | '/accept-invitation/$invitationId'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth/login'
-    | '/demo/tanstack-query'
     | '/_authenticated/teams/$teamId'
     | '/_authenticated/teams/add-member'
-    | '/demo/form/address'
-    | '/demo/form/simple'
     | '/_authenticated/teams/'
+    | '/accept-invitation/$invitationId/'
   fileRoutesById: FileRoutesById
 }
 
@@ -243,18 +204,15 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthLoginRoute: typeof AuthLoginRoute
-  DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
-  DemoFormAddressRoute: typeof DemoFormAddressRoute
-  DemoFormSimpleRoute: typeof DemoFormSimpleRoute
+  AcceptInvitationInvitationIdIndexRoute: typeof AcceptInvitationInvitationIdIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthLoginRoute: AuthLoginRoute,
-  DemoTanstackQueryRoute: DemoTanstackQueryRoute,
-  DemoFormAddressRoute: DemoFormAddressRoute,
-  DemoFormSimpleRoute: DemoFormSimpleRoute,
+  AcceptInvitationInvitationIdIndexRoute:
+    AcceptInvitationInvitationIdIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -270,9 +228,7 @@ export const routeTree = rootRoute
         "/",
         "/_authenticated",
         "/auth/login",
-        "/demo/tanstack-query",
-        "/demo/form/address",
-        "/demo/form/simple"
+        "/accept-invitation/$invitationId/"
       ]
     },
     "/": {
@@ -289,9 +245,6 @@ export const routeTree = rootRoute
     "/auth/login": {
       "filePath": "auth/login.tsx"
     },
-    "/demo/tanstack-query": {
-      "filePath": "demo.tanstack-query.tsx"
-    },
     "/_authenticated/teams/$teamId": {
       "filePath": "_authenticated/teams/$teamId.tsx",
       "parent": "/_authenticated"
@@ -300,15 +253,12 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/teams/add-member.tsx",
       "parent": "/_authenticated"
     },
-    "/demo/form/address": {
-      "filePath": "demo.form.address.tsx"
-    },
-    "/demo/form/simple": {
-      "filePath": "demo.form.simple.tsx"
-    },
     "/_authenticated/teams/": {
       "filePath": "_authenticated/teams/index.tsx",
       "parent": "/_authenticated"
+    },
+    "/accept-invitation/$invitationId/": {
+      "filePath": "accept-invitation/$invitationId/index.tsx"
     }
   }
 }

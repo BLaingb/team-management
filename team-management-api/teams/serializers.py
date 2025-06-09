@@ -43,6 +43,12 @@ class TeamSerializer(serializers.ModelSerializer):
         return TeamMemberSerializer(members, many=True).data
 
 
+class TeamMinimalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Team
+        fields = ["id", "name", "description"]
+
+
 class TeamInvitationSerializer(serializers.ModelSerializer):
     class Meta:
         model = TeamInvitation
@@ -73,3 +79,14 @@ class TeamInvitationSerializer(serializers.ModelSerializer):
                 "There is already a pending or accepted invitation for this email and team."
             )
         return data
+
+
+class TeamInvitationDetailSerializer(TeamInvitationSerializer):
+    user_exists = serializers.SerializerMethodField()
+    team = TeamMinimalSerializer(read_only=True)
+
+    class Meta(TeamInvitationSerializer.Meta):
+        fields = TeamInvitationSerializer.Meta.fields + ["user_exists", "team"]
+
+    def get_user_exists(self, obj):
+        return User.objects.filter(email=obj.email).exists()

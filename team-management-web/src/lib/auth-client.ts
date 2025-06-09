@@ -15,6 +15,7 @@ const userSchema = z.object({
 
 const { queryClient } = getContext();
 
+
 export const authClient = {
   getSession: async () => {
     try {
@@ -59,6 +60,24 @@ export const authClient = {
       throw new Error('Logout failed');
     }
     queryClient.invalidateQueries({ queryKey: SESSION_QUERY_KEY });
+  },
+
+  signup: async (userData: { email: string; password: string; first_name: string; last_name: string; phone_number: string, password2: string }) => {
+    try {
+      const response = await fetch(`${env.VITE_API_URL}/api/signup/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData),
+        credentials: 'include',
+      });
+      if (!response.ok) {
+        throw new Error('Signup failed');
+      }
+      return userSchema.parse(await response.json());
+    } catch (error) {
+      console.error('Error signing up:', error);
+      throw error;
+    }
   },
 };
 
