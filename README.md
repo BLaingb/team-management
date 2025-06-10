@@ -1,6 +1,7 @@
 # Instawork's Team Management
 This project is done as part of Instawork's recruitment process. While the requirements specify an app with 3 pages (view team members, add team member, edit team member), I took some liberty around the requirements to get a more realistic use case (eg. When adding a team member, they'd need a way to sign up and access the app). The assumptions made are [listed below](#assumptions-made), along with a short description on why they were made and how they were accounted for.
 
+Want to skip to the fun part? [Visit the deployed project.](https://instawork.laing.mx)
 
 ## Stack
 
@@ -51,3 +52,8 @@ A few improvements I'd like to make, that haven't been done due to time constrai
 - Cron to invalidate/expire invitations, setup as a custom `manage.py` command, and called in a cron on the server
 - Generic API error management on the FE, based on DRF's approach to error responses
 - Reuse&Colocate zod schemas accross APIs and forms
+
+## Using the API
+You can view and use a public Postman collection [here](https://www.postman.com/kossina/instawork-team-management/collection/zfwe2l9/team-management)
+
+To be able to access any resources, you'll need to authenticate first, by using the **Obtain Access Token** Request. This will properly set your authentication cookies, and you're good to go.
