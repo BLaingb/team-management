@@ -3,6 +3,11 @@ This project is done as part of Instawork's recruitment process. While the requi
 
 Want to skip to the fun part? [Visit the deployed project.](https://instawork.laing.mx)
 
+## Deployment
+The project is deployed the following way:
+- Backend is hosted on a VPS, managed with [Coolify](https://coolify.io) for automated deployments, SSL Cert management, and general ease of deployment.
+- Frontend is currently deployed on Vercel, for ease of deployment. I'm seeing some issues running vite on vercel (hadn't done that before), so I'm working on moving it to the coolify server
+
 ## Stack
 
 ### Backend
