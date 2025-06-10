@@ -2,6 +2,7 @@ import { env } from "@/env";
 import { useQuery } from "@tanstack/react-query";
 import { z } from "zod";
 import { apiClient } from "./api-client";
+import { ensurePhoneNumberPrefix } from "./utils";
 
 const teamRoleSchema = z.object({
 	id: z.number(),
@@ -137,7 +138,7 @@ export const teamClient = {
 					headers: {
 						"Content-Type": "application/json",
 					},
-					body: JSON.stringify(invitation),
+					body: JSON.stringify({ ...invitation, phone_number: ensurePhoneNumberPrefix(invitation.phone_number) }),
 				},
 			);
 			if (!response.ok) {

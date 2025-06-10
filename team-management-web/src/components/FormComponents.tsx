@@ -10,6 +10,8 @@ import * as ShadcnSelect from '@/components/ui/select'
 import { Slider as ShadcnSlider } from '@/components/ui/slider'
 import { Switch as ShadcnSwitch } from '@/components/ui/switch'
 import { Textarea as ShadcnTextarea } from '@/components/ui/textarea'
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 
 export function SubscribeButton({ label }: { label: string }) {
   const form = useFormContext()
@@ -200,6 +202,42 @@ export function PasswordField({
       </div>
     )
   }
+
+export function PhoneField({
+  label,
+  placeholder = 'Enter phone number',
+}: {
+  label: string
+  placeholder?: string
+}) {
+  const field = useFieldContext<string>()
+  const errors = useStore(field.store, (state) => state.meta.errors)
+
+  return (
+    <div>
+      <Label htmlFor={label} className="mb-2 text-xl font-bold">
+        {label}
+      </Label>
+      <PhoneInput
+        country={'mx'}
+        preferredCountries={['mx', 'us']}
+        value={field.state.value}
+        onChange={(value) => field.handleChange(value)}
+        onBlur={field.handleBlur}
+        inputProps={{
+          name: field.name,
+          required: true,
+          placeholder,
+        }}
+        containerClass="!w-full"
+        inputClass="!w-full !h-10 !rounded-md !border !border-input !bg-background  !py-2 !text-sm !ring-offset-background file:!border-0 file:!bg-transparent file:!text-sm file:!font-medium placeholder:!text-muted-foreground focus-visible:!outline-none focus-visible:!ring-2 focus-visible:!ring-ring focus-visible:!ring-offset-2 disabled:!cursor-not-allowed disabled:!opacity-50"
+        buttonClass="!border !border-input !bg-background"
+        dropdownClass="!bg-background !border !border-input"
+      />
+      {field.state.meta.isTouched && <ErrorMessages errors={errors} />}
+    </div>
+  )
+}
 
 export function RadioGroupField({
   label,
