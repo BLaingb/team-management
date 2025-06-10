@@ -173,6 +173,15 @@ class TeamMemberViewSet(viewsets.ModelViewSet):
     permission_classes = [HasTeamPermission]
     required_permission = "members:view"
 
+    def get_object_without_permission_check(self):
+        """
+        Get the object without checking permissions.
+        Similar to DRF's APIView.get_object() but without checking permissions.
+        """
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+        filter_kwargs = {self.lookup_field: self.kwargs[lookup_url_kwarg]}
+        return get_object_or_404(self.queryset, **filter_kwargs)
+
     def get_serializer_class(self):
         if self.action in ["update", "partial_update"]:
             return TeamMemberUpdateSerializer
@@ -182,7 +191,12 @@ class TeamMemberViewSet(viewsets.ModelViewSet):
         if self.action in ["update", "partial_update"]:
             self.required_permission = "members:update"
         elif self.action == "destroy":
-            self.required_permission = "members:remove"
+            current_member = self.get_object_without_permission_check()
+            if self.request.user.id == current_member.user.id:
+                print("current_member", current_member)
+                self.required_permission = "members:leave"
+            else:
+                self.required_permission = "members:remove"
         else:
             self.required_permission = "members:view"
         return super().get_permissions()

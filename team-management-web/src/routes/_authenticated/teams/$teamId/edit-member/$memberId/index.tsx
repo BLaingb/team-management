@@ -217,7 +217,7 @@ function EditMemberPage() {
 							{hasTeamPermission(
 								"members:delete",
 								teamPermissions?.permissions,
-							) && (
+							) || member?.user.id === user?.id && (
 								<Dialog
 									open={isDeleteDialogOpen}
 									onOpenChange={setIsDeleteDialogOpen}
