@@ -1,4 +1,5 @@
-import { RadioGroupField } from "@/components/FormComponents";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useAppForm } from "@/hooks/useAppForm";
 import { teamClient, useGetTeamPermissions } from "@/lib/team-client";
 import { hasTeamPermission } from "@/lib/utils";
@@ -43,7 +44,7 @@ function AddMemberPage() {
       lastName: "",
       email: "",
       phone: "",
-      role: "",
+      role: "1",
     },
     validators: {
       onBlur: formSchema,
@@ -98,17 +99,34 @@ function AddMemberPage() {
               {(field) => <field.TextField label="Phone" placeholder="Enter phone number" />}
             </form.AppField>
             <form.AppField name="role">
-              {() => (
-                <RadioGroupField
-                  label="Role"
-                  options={roles?.map((role: { id: number; name: string; description: string }) => ({
-                    label: role.name,
-                    value: role.id.toString(),
-                    description: role.description,
-                  })) || []}
-                />
+            {(field) => (
+                <div>
+                  <Label className="mb-2 block">Role</Label>
+                  <RadioGroup
+                    value={field.state.value}
+                    onValueChange={field.handleChange}
+                    className="space-y-2"
+                  >
+                    {roles?.map((role: { id: number; name: string; description: string }) => (
+                      <div key={role.id} className="flex items-center space-x-2">
+                        <RadioGroupItem value={role.id.toString()} id={`role-${role.id}`} />
+                        <Label htmlFor={`role-${role.id}`} className="font-medium">
+                          {role.name} <span className="text-xs text-gray-500">- {role.description}</span>
+                        </Label>
+                      </div>
+                    ))}
+                  </RadioGroup>
+                  {field.state.meta.errors && field.state.meta.errors.length > 0 &&
+                    typeof field.state.meta.errors[0] === "string" && (
+                      <div className="text-xs text-red-500 mt-1">{field.state.meta.errors[0]}</div>
+                    )}
+                </div>
               )}
             </form.AppField>
+            {form.state.errors && form.state.errors.length > 0 &&
+                    typeof form.state.errors[0] === "string" && (
+                      <div className="text-xs text-red-500 mt-1">{form.state.errors[0]}</div>
+                    )}
             <button
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md text-sm"
