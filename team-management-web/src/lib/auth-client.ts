@@ -1,4 +1,4 @@
-import { queryOptions } from '@tanstack/react-query';
+import { queryOptions, useQuery } from '@tanstack/react-query';
 import { z } from 'zod';
 import { env } from '../env';
 import { getContext } from '../integrations/tanstack-query/root-provider';
@@ -83,3 +83,7 @@ export const sessionQueryOptions = queryOptions({
   queryFn: () => authClient.getSession(),
   staleTime: 5 * 60 * 1000, // 5 minutes
 });
+
+export const useGetSession = () => {
+  return useQuery(sessionQueryOptions);
+};

@@ -258,9 +258,12 @@ export const teamClient = {
                 method: "DELETE",
             });
             if (!response.ok) {
+                const errorResponse = await response.json();
+                if (errorResponse.detail) {
+                    throw new Error(errorResponse.detail);
+                }
                 throw new Error("Failed to delete team member");
             }
-            return response.json();
         } catch (error) {
             console.error("Error deleting team member:", error);
             throw error;

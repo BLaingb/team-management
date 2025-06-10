@@ -1,14 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { useAppForm } from "@/hooks/useAppForm";
+import { useGetSession } from "@/lib/auth-client";
 import { teamClient, useGetTeamPermissions } from "@/lib/team-client";
 import { hasTeamPermission } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate, useParams } from "@tanstack/react-router";
+import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -25,6 +28,8 @@ function EditMemberPage() {
   const { teamId, memberId } = useParams({ from: "/_authenticated/teams/$teamId/edit-member/$memberId/" });
   const teamIdNum = Number(teamId);
   const memberIdNum = Number(memberId);
+  const { data: user } = useGetSession();
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const {
     data: member,
@@ -61,6 +66,16 @@ function EditMemberPage() {
       }
     },
   });
+
+  const handleDelete = async () => {
+    try {
+      await teamClient.deleteTeamMember(teamIdNum, memberIdNum);
+      toast.success("Team member removed successfully");
+      navigate({ to: "/teams/$teamId", params: { teamId: teamIdNum.toString() } });
+    } catch (err) {
+      toast.error((err as Error).message || "Failed to remove team member");
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
@@ -124,6 +139,29 @@ function EditMemberPage() {
               )}
             </form.AppField>
             <div className="flex justify-end gap-2 pt-2">
+              <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="destructive" type="button">
+                    {member?.user.id === user?.id ? "Leave Team" : "Remove Member"}
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Are you sure?</DialogTitle>
+                    <DialogDescription>
+                      This action cannot be undone. This will permanently remove {member?.user?.full_name} from the team.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
+                      Cancel
+                    </Button>
+                    <Button variant="destructive" onClick={handleDelete}>
+                      Delete
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
               <Button type="submit" className="bg-blue-600 text-white rounded-md px-6">
                 {form.state.isSubmitting ? "Saving..." : "Save"}
               </Button>
