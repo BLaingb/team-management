@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { env } from '../env';
 import { getContext } from '../integrations/tanstack-query/root-provider';
 import { apiClient } from './api-client';
+import { ensurePhoneNumberPrefix } from './utils';
 
 const SESSION_QUERY_KEY = ['session'];
 
@@ -65,7 +66,7 @@ export const authClient = {
       const response = await apiClient(`${env.VITE_API_URL}/api/signup/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData),
+        body: JSON.stringify({ ...userData, phone_number: ensurePhoneNumberPrefix(userData.phone_number) }),
       });
       if (!response.ok) {
         throw new Error('Signup failed');

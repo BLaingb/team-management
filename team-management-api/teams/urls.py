@@ -25,7 +25,7 @@ teams_router.register(r"members", TeamMemberViewSet, basename="team-members")
 urlpatterns = (
     router.urls
     + teams_router.urls
-    + [ # Specific paths that don't follow ViewSet patterns
+    + [  # Specific paths that don't follow ViewSet patterns
         # Team Invitations
         path(
             "team-invitations/",

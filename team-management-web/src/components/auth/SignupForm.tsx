@@ -60,7 +60,7 @@ export function SignupForm({ invitation, onSuccess }: { invitation: TeamInvitati
         {(field) => <field.TextField label="Email" placeholder="Enter your email" />}
       </form.AppField>
       <form.AppField name="phone_number">
-        {(field) => <field.TextField label="Phone Number" placeholder="Enter your phone number" />}
+        {(field) => <field.PhoneField label="Phone Number" />}
       </form.AppField>
       <form.AppField name="password">
         {(field) => <field.PasswordField label="Password" placeholder="********" />}

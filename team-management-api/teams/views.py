@@ -214,14 +214,21 @@ class MyTeamPermissionsView(APIView):
         try:
             team = Team.objects.get(id=team_id)
         except Team.DoesNotExist:
-            return Response({"detail": "Team not found."}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"detail": "Team not found."}, status=status.HTTP_404_NOT_FOUND
+            )
         try:
             team_member = TeamMember.objects.get(team=team, user=request.user)
         except TeamMember.DoesNotExist:
-            return Response({"detail": "You are not a member of this team."}, status=status.HTTP_403_FORBIDDEN)
+            return Response(
+                {"detail": "You are not a member of this team."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
         role = team_member.role
-        return Response({
-            "team": team.id,
-            "role": role.name,
-            "permissions": role.permissions,
-        })
+        return Response(
+            {
+                "team": team.id,
+                "role": role.name,
+                "permissions": role.permissions,
+            }
+        )

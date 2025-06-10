@@ -96,7 +96,7 @@ function AddMemberPage() {
               {(field) => <field.TextField label="Email" placeholder="Enter email" />}
             </form.AppField>
             <form.AppField name="phone">
-              {(field) => <field.TextField label="Phone" placeholder="Enter phone number" />}
+              {(field) => <field.PhoneField label="Phone" />}
             </form.AppField>
             <form.AppField name="role">
             {(field) => (

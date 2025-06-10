@@ -18,3 +18,10 @@ export function hasTeamPermission(permission: string, teamPermissions: TeamPermi
   return teamPermissions.includes(permission);
 }
 
+export function ensurePhoneNumberPrefix(value: string) {
+  if (value.startsWith('+')) {
+    return value
+  }
+  return `+${value}`
+}
+

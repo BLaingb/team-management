@@ -47,13 +47,9 @@ class HttpOnlyCookieTokenObtainPairView(TokenObtainPairView):
             key=settings.SIMPLE_JWT["AUTH_COOKIE_ACCESS"],
             value=str(access_token),
             expires=settings.SIMPLE_JWT["ACCESS_TOKEN_LIFETIME"],
-            secure=settings.SIMPLE_JWT[
-                "AUTH_COOKIE_SECURE"
-            ],
+            secure=settings.SIMPLE_JWT["AUTH_COOKIE_SECURE"],
             httponly=True,
-            samesite=settings.SIMPLE_JWT[
-                "AUTH_COOKIE_SAMESITE"
-            ],
+            samesite=settings.SIMPLE_JWT["AUTH_COOKIE_SAMESITE"],
         )
 
         response.set_cookie(
