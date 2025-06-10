@@ -206,6 +206,15 @@ class TeamMemberViewSet(viewsets.ModelViewSet):
             status=status.HTTP_405_METHOD_NOT_ALLOWED,
         )
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if TeamMember.objects.is_last_admin(instance):
+            return Response(
+                {"detail": "Cannot remove the last admin from the team. Please assign another admin first."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        return super().destroy(request, *args, **kwargs)
+
 
 class MyTeamPermissionsView(APIView):
     permission_classes = [IsAuthenticated]
