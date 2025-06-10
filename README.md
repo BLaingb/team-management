@@ -1,12 +1,11 @@
 # Instawork's Team Management
 This project is done as part of Instawork's recruitment process. While the requirements specify an app with 3 pages (view team members, add team member, edit team member), I took some liberty around the requirements to get a more realistic use case (eg. When adding a team member, they'd need a way to sign up and access the app). The assumptions made are [listed below](#assumptions-made), along with a short description on why they were made and how they were accounted for.
 
-Want to skip to the fun part? [Visit the deployed project.](https://instawork.laing.mx)
+Want to skip to the fun part? [Visit the deployed project.](https://team-management.laing.mx)
 
 ## Deployment
 The project is deployed the following way:
-- Backend is hosted on a VPS, managed with [Coolify](https://coolify.io) for automated deployments, SSL Cert management, and general ease of deployment.
-- Frontend is currently deployed on Vercel, for ease of deployment. I'm seeing some issues running vite on vercel (hadn't done that before), so I'm working on moving it to the coolify server
+Backend and Frontend are deployed as separate apps, hosted on a VPS, managed with [Coolify](https://coolify.io) for automated deployments, SSL Cert management, and general ease of deployment.
 
 ## Stack
 
