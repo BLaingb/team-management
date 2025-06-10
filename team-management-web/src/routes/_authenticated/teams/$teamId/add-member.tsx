@@ -33,7 +33,7 @@ function AddMemberPage() {
     queryFn: teamClient.getTeamRoles,
   });
   const { data: teamPermissions } = useGetTeamPermissions(teamIdNum);
-  if (!hasTeamPermission("members:create", teamPermissions?.permissions)) {
+  if (!hasTeamPermission("members:add", teamPermissions?.permissions)) {
     navigate({ to: "/teams/$teamId", params: { teamId: teamIdNum.toString() } });
   }
 
