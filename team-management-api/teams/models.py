@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from django.utils import timezone
+from utils.validators.phone_number_validator import PhoneNumberValidator
 
 UserModel = get_user_model()
 
@@ -60,7 +61,7 @@ class TeamInvitation(models.Model):
     email = models.EmailField()
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=255, validators=[PhoneNumberValidator()])
     role = models.ForeignKey(TeamRole, on_delete=models.CASCADE)
     status = models.CharField(
         max_length=255,
