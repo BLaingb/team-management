@@ -1,4 +1,4 @@
-Welcome to your new TanStack app! 
+# Team Management Web App
 
 # Getting Started
 
@@ -64,23 +64,6 @@ import { env } from "@/env";
 
 console.log(env.VITE_APP_TITLE);
 ```
-
-
-
-
-
-## Setting up Netlify
-
-First install the Netlify CLI with:
-
-```bash
-npm install -g netlify-cli`
-```
-
-```bash
-netlify init
-```
-
 
 
 ## Routing
@@ -331,11 +314,3 @@ We use the `Derived` class to create a new store that is derived from another st
 Once we've created the derived store we can use it in the `App` component just like we would any other store using the `useStore` hook.
 
 You can find out everything you need to know on how to use TanStack Store in the [TanStack Store documentation](https://tanstack.com/store/latest).
-
-# Demo files
-
-Files prefixed with `demo` can be safely deleted. They are there to provide a starting point for you to play around with the features you've installed.
-
-# Learn More
-
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).

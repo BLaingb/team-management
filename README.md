@@ -44,9 +44,10 @@ As the app is dealing with sensitive details (team members' contact details), I 
 ### Admins can edit only their team member's role
 Given each team member has access to the app, and their own data, having admins updating another user's personal information didn't quite fit IMO. While this could not be the case, for the moment, it was solved by allowing the user to set up their details on signup, being pre-filled by the data on the invitation sent. In this scenario, Admins can still update other members' role for their team.
 
-## TODO
-- Deploy app
-- Email sending on background workers
-- Cron to invalidate/expire invitations
-- Generic API error management
+## Future Improvements
+A few improvements I'd like to make, that haven't been done due to time constraints.
+
+- Email sending on background workers using Django Q or Celery
+- Cron to invalidate/expire invitations, setup as a custom `manage.py` command, and called in a cron on the server
+- Generic API error management on the FE, based on DRF's approach to error responses
 - Reuse&Colocate zod schemas accross APIs and forms
