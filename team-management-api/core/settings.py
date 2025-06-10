@@ -81,7 +81,7 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-DB_PATH = os.path.join(BASE_DIR, "db.sqlite3")
+DB_PATH = os.path.join(BASE_DIR, "data", "db.sqlite3")
 
 DATABASES = {
     "default": {
