@@ -26,11 +26,24 @@ class TeamRole(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def can_manage_members(self):
+        permissions = ["members:add", "members:update", "members:remove"]
+        return all(permission in self.permissions for permission in permissions)
 
 
 class TeamMemberManager(models.Manager):
     def is_user_member(self, team, email):
         return self.filter(team=team, user__email=email).exists()
+
+    def is_last_admin(self, team_member):
+        if not team_member.role.can_manage_members():
+            return False
+        admin_count = self.filter(
+            team=team_member.team,
+            role=team_member.role
+        ).count()
+        return admin_count <= 1
 
 
 class TeamMember(models.Model):
